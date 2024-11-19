@@ -8,11 +8,11 @@
         <a class="hidden sm:block font-medium text-lg" href="{{ route('home') }}">
             The Dog Kennel
         </a>
-        <x-nav-link href="{{--{{ route('shop') }}--}}" :active="request()->routeIs('shop')">
+        <x-nav-link href="{{ route('shop') }}" :active="request()->routeIs('shop')">
             Shop
         </x-nav-link>
         <x-nav-link href="{{--{{ route('contact') }}--}}" :active="request()->routeIs('contact')">
-            Contact
+            Contact us
         </x-nav-link>
     </div>
 
