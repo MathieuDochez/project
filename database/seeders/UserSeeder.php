@@ -38,5 +38,6 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'), // Use a secure password
             'remember_token' => \Str::random(10),
         ]);
+
     }
 }
