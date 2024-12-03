@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('dogs', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('breed');
+            $table->integer('age');
+            $table->integer('weight');
+            $table->string('color');
+            $table->unsignedBigInteger('owner_id');
             $table->timestamps();
         });
     }
