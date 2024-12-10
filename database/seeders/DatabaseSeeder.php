@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DogSeeder::class,
             ShopSeeder::class,
+            ReviewSeeder::class,
 
         ]);
     }

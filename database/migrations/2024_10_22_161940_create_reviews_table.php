@@ -9,10 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->nullable(); // Allow NULL values for guest users
+            $table->integer('rating');
+            $table->text('comment');
             $table->timestamps();
         });
     }

@@ -12,7 +12,7 @@
         <div class="flex justify-between border-t border-gray-300 bg-gray-100 px-4 py-2">
             <div></div>
             <div class="flex space-x-4">
-                <button class="w-6 hover:text-red-900">
+                <button wire:click="addToBasket({{ $item->id }})" class="w-6 hover:text-red-900">
                     <x-phosphor-shopping-bag-light/>
                 </button>
             </div>
