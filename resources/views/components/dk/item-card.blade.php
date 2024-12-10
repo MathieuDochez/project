@@ -15,9 +15,6 @@
                 <button class="w-6 hover:text-red-900">
                     <x-phosphor-shopping-bag-light/>
                 </button>
-                <button class="w-6 hover:text-red-900">
-                    <x-phosphor-music-notes-light/>
-                </button>
             </div>
         </div>
     </div>
