@@ -2,41 +2,41 @@
 
 namespace App\Livewire;
 
+use App\Models\Basket;
+use App\Models\Shop as ShopModel;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class Shop extends Component
 {
     public $items;
-    #[Layout('layouts.project', ['title' => 'Shop', 'description' => 'Welcome to our shop'])]
 
     public function mount()
     {
-        $this->items = \App\Models\Shop::all();
-    }
-
-    public function render()
-    {
-        return view('livewire.shop');
+        $this->items = ShopModel::all();
     }
 
     public function addToBasket($itemId)
     {
-        // Retrieve the item from the database
-        $item = Shop::find();
-        // Check if the item is already in the basket
-        if (isset($this->basket[$itemId])) {
-            // If it is, increment the quantity
-            $this->basket[$itemId]['quantity']++;
-        } else {
-            // If not, add it to the basket with a quantity of 1
-            $this->basket[$itemId] = [
-                'item' => $item,
-                'quantity' => 1,
-            ];
+        if (!Auth::check()) {
+            session()->flash('error', 'Please log in to add items to your basket.');
+            return;
         }
 
-        // You can also emit an event to update the basket in other components
-        $this->emit('basketUpdated');
+        $basketItem = Basket::firstOrCreate(
+            ['user_id' => Auth::id(), 'item_id' => $itemId],
+            ['quantity' => 0]
+        );
+        $basketItem->increment('quantity');
+
+        $this->emit('basket-updated');
+    }
+
+
+    #[Layout('layouts.project', ['title' => 'Shop', 'description' => 'Dog kennel Shop'])]
+    public function render()
+    {
+        return view('livewire.shop');
     }
 }

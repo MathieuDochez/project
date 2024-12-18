@@ -15,7 +15,7 @@
         "laravel/jetstream": "5",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "livewire/livewire": "^3.0",
+        "livewire/livewire": "^3.5",
         "owenvoke/blade-fontawesome": "^2.6"
     },
     "require-dev": {

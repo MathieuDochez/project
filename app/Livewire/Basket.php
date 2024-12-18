@@ -2,40 +2,48 @@
 
 namespace App\Livewire;
 
-use App\Helpers\Cart;
-use Livewire\Attributes\Layout;
+use App\Models\Basket as BasketModel;
 use App\Models\Shop;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Basket extends Component
 {
     public function emptyBasket()
     {
-        Cart::empty();
+        BasketModel::where('user_id', Auth::id())->delete();
         $this->dispatch('basket-updated');
     }
 
-    public function decreaseQty(Shop $shop)
+    public function decreaseQty($itemId)
     {
-        Cart::delete($shop);
+        $basketItem = BasketModel::where('user_id', Auth::id())->where('item_id', $itemId)->first();
+        if ($basketItem && $basketItem->quantity > 1) {
+            $basketItem->decrement('quantity');
+        } else {
+            $basketItem?->delete();
+        }
         $this->dispatch('basket-updated');
     }
 
-    public function increaseQty(Shop $shop)
+    public function increaseQty($itemId)
     {
-        Cart::add($shop);
+        $basketItem = BasketModel::firstOrCreate(
+            ['user_id' => Auth::id(), 'item_id' => $itemId],
+            ['quantity' => 0]
+        );
+        $basketItem->increment('quantity');
         $this->dispatch('basket-updated');
     }
 
     public function placeOrder()
     {
-
+        // Here, you could add order logic, like creating an Order model and clearing the basket.
     }
 
-    #[Layout('layouts.project', ['title' => 'Your shopping basket', 'description' => 'Your shopping basket',])]
     public function render()
     {
-        return view('livewire.basket');
+        $items = BasketModel::where('user_id', Auth::id())->with('item')->get();
+        return view('livewire.basket', ['items' => $items]);
     }
 }
-
