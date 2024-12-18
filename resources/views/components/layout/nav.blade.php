@@ -14,7 +14,7 @@
         <x-nav-link href="{{ route('reviews') }}" :active="request()->routeIs('reviews')">
             Reviews
         </x-nav-link>
-        <x-nav-link href="{{--{{ route('contact') }}--}}" :active="request()->routeIs('contact')">
+        <x-nav-link href="{{ route('contact') }}" :active="request()->routeIs('contact')">
             Contact us
         </x-nav-link>
     </div>

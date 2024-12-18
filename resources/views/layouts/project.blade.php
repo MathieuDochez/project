@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
     <meta name="description" content="{{ $description ?? 'Welcome to the Dog kennel' }}">
     <title>{{ $title ?? 'The Dog Kennel' }}</title>
 </head>
@@ -23,6 +24,7 @@
     </main>
     <x-layout.footer/>
     @stack('script')
+    @livewireScripts
 </div>
 </body>
 </html>
