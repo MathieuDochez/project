@@ -11,10 +11,19 @@ use Livewire\Component;
 class Shop extends Component
 {
     public $items;
+    public $basketItems = [];
 
     public function mount()
     {
         $this->items = ShopModel::all();
+        $this->updateBasketView();
+    }
+
+    protected function updateBasketView()
+    {
+        $this->basketItems = Basket::where('user_id', Auth::id())
+            ->with('item') // Adjust this based on your relationships
+            ->get();
     }
 
     public function addToBasket($itemId)
@@ -29,9 +38,9 @@ class Shop extends Component
             ['quantity' => 0]
         );
         $basketItem->increment('quantity');
-
-        $this->emit('basket-updated');
+        $this->updateBasketView();
     }
+
 
 
     #[Layout('layouts.project', ['title' => 'Shop', 'description' => 'Dog kennel Shop'])]

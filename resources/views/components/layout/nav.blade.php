@@ -31,7 +31,7 @@
             Register
         </x-nav-link>
         @endguest
-        <x-nav-link href="{{--{{ route('under-construction') }}--}}" :active="request()->routeIs('under-construction')">
+        <x-nav-link href="{{ route('basket') }}" :active="request()->routeIs('basket')">
             <x-fas-shopping-basket class="w-4 h-4"/>
         </x-nav-link>
         {{-- dropdown navigation--}}
