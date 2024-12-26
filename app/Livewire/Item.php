@@ -3,19 +3,19 @@
 namespace App\Livewire;
 
 use App\Models\Basket;
-use App\Models\Shop as ShopModel;
+use App\Models\Item as ItemModel;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-class Shop extends Component
+class Item extends Component
 {
     public $items;
     public $basketItems = [];
 
     public function mount()
     {
-        $this->items = ShopModel::all();
+        $this->items = ItemModel::all();
         $this->updateBasketView();
     }
 
@@ -43,7 +43,7 @@ class Shop extends Component
 
 
 
-    #[Layout('layouts.project', ['title' => 'Shop', 'description' => 'Dog kennel Shop'])]
+    #[Layout('layouts.project', ['title' => 'Item', 'description' => 'Dog kennel Item'])]
     public function render()
     {
         return view('livewire.shop');

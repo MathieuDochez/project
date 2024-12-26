@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Basket as BasketModel;
-use App\Models\Shop;
+use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -108,7 +108,7 @@ class Basket extends Component
             ->get();
     }
 
-    #[Layout('layouts.project', ['title' => 'Basket', 'description' => 'Dog kennel Shop'])]
+    #[Layout('layouts.project', ['title' => 'Basket', 'description' => 'Dog kennel Item'])]
     public function render()
     {
         return view('livewire.basket', [

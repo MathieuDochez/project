@@ -9,7 +9,7 @@
             The Dog Kennel
         </a>
         <x-nav-link href="{{ route('shop') }}" :active="request()->routeIs('shop')">
-            Shop
+            Item
         </x-nav-link>
         <x-nav-link href="{{ route('reviews') }}" :active="request()->routeIs('reviews')">
             Reviews
@@ -31,9 +31,7 @@
             Register
         </x-nav-link>
         @endguest
-        <x-nav-link href="{{ route('basket') }}" :active="request()->routeIs('basket')">
-            <x-fas-shopping-basket class="w-4 h-4"/>
-        </x-nav-link>
+        @livewire('partials.mini-basket')
         {{-- dropdown navigation--}}
         @auth
         <x-dropdown align="right" width="48">

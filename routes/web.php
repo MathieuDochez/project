@@ -1,12 +1,12 @@
 <?php
 
 use App\Livewire\Reviews;
-use App\Livewire\Shop;
+use App\Livewire\Item;
 use App\Livewire\Basket;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
-Route::get('shop', Shop::class)->name('shop');
+Route::get('shop', Item::class)->name('shop');
 Route::get('reviews', Reviews::class)->name('reviews');
 Route::view('contact', 'contact')->name('contact');
 Route::get('basket', Basket::class)->name('basket');

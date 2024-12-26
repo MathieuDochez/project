@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Basket;
 use App\Models\User;
-use App\Models\Shop;
+use App\Models\Item;
 use Illuminate\Database\Seeder;
 
 class BasketSeeder extends Seeder
@@ -16,7 +16,7 @@ class BasketSeeder extends Seeder
     {
         // Assuming the user and items exist in your database
         $user = User::first();
-        $item = Shop::first();
+        $item = Item::first();
 
         Basket::create([
             'user_id' => $user->id,
