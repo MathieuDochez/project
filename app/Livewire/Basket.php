@@ -52,14 +52,75 @@ class Basket extends Component
 namespace App\Livewire;
 
 use App\Helpers\Cart;
+use App\Livewire\Forms\ShippingForm;
 use App\Models\Item as ItemModel;
+use App\Models\Order;
+use App\Models\Orderline;
+use App\Traits\SweetAlertTrait;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Basket extends Component
 {
+    use SweetAlertTrait;
+
     public $backorder = [];
+    public $showModal = false;
+    public ShippingForm $form;
+
+    public function checkoutForm()
+    {
+        $this->form->reset();
+        $this->resetErrorBag();
+        $this->showModal = true;
+    }
+
+    public function checkout()
+    {
+        // validate the form
+        $this->form->validate();
+        // hide the modal
+        $this->showModal = false;
+        // check if there are records in backorder
+        $this->updateBackorder();
+
+        // add the order to the database
+        // update the stock
+        // send confirmation email to the user and to the administrators
+
+        // reset the form, backorder array and error bag
+        $this->form->reset();
+        $this->reset('backorder');
+        $this->resetErrorBag();
+        // empty the cart
+        Cart::empty();
+        $this->dispatch('basket-updated');
+        // show a confirmation message
+        $this->swalToast("Thank you for your order.<br>The records will be shipped as soon as possible.");
+
+        // add the order to the database![img.png](img.png)
+        $order = Order::create([
+            'user_id' => auth()->user()->id,
+            'total_price' => Cart::getTotalPrice(),
+        ]);
+        // loop over the records in the basket and add them to the orderlines table
+        foreach (Cart::getItems() as $item) {
+            Orderline::create([
+                'order_id' => $order->id,
+                'name' => $item['name'],
+                'description' => $item['description'],
+                'price' => $item['price'],
+                'total_price' => $item['price'],
+                'quantity' => $item['qty'],
+            ]);
+            // update the stock
+            $updateQty = ItemModel::findOrFail($item['id']);
+            $updateQty->stock > $item['qty'] ? $updateQty->stock -= $item['qty'] : $updateQty->stock = 0;
+            $updateQty->save();
+        }
+    }
+
     public function emptyBasket()
     {
         Cart::empty();
@@ -96,7 +157,6 @@ class Basket extends Component
     public function render()
     {
         $this->updateBackorder();
-        @dump(Cart::getItems());
         return view('livewire.basket', [
             'totalQty' =>Cart::getTotalQty(),
             'totalPrice' => Cart::getTotalPrice(),

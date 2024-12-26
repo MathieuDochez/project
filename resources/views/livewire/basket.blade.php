@@ -33,7 +33,7 @@
                 <tbody>
                 @foreach( $items as $item)
                     <tr class="border-b border-gray-300 align-top [&>td]:py-2">
-                        {{--<td>{{ $item['qty'] }}</td>--}}
+                        <td>{{ $item['qty'] }}</td>
                         <td>€ {{ $item['price'] }}</td>
                         {{--<td>
                             <img src="{{ $item['cover'] }}" alt="{{ $item['item'] . ' - ' . $item['description'] }}"/>
@@ -76,7 +76,7 @@
                     <tr>
                         <td colspan="4"></td>
                         <td class="pt-4 text-left">
-                            <x-dk.form.button color="info">
+                            <x-dk.form.button color="info" wire:click="checkoutForm()">
                                 Checkout
                             </x-dk.form.button>
                         </td>
@@ -86,4 +86,47 @@
             </table>
         </x-dk.section>
     @endif
+        <x-dialog-modal id="checkoutModal" wire:model.live="showModal">
+            <x-slot name="title">
+                <h2>Checkout</h2>
+            </x-slot>
+            <x-slot name="content">
+                <h3>Shipping address</h3>
+                <div class="mt-4 space-y-1">
+                    <x-label for="address" value="Address"/>
+                    <x-input id="address" type="text" class="block w-full"
+                             wire:model.blur="form.address"/>
+                    <x-input-error for="form.address"/>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <div class="space-y-1">
+                        <x-label for="city" value="City"/>
+                        <x-input id="city" type="text" class="block w-full"
+                                 wire:model.blur="form.city"/>
+                        <x-input-error for="form.city"/>
+                    </div>
+                    <div class="space-y-1">
+                        <x-label for="zip" value="Zip"/>
+                        <x-input id="zip" type="text" class="block w-full"
+                                 wire:model.blur="form.zip"/>
+                        <x-input-error for="form.zip"/>
+                    </div>
+                </div>
+                <div class="mt-4 space-y-1">
+                    <x-label for="country" value="Country"/>
+                    <x-input id="country" type="text" class="block w-full"
+                             wire:model.blur="form.country"/>
+                    <x-input-error for="form.country"/>
+                </div>
+                <div class="mt-4 space-y-1">
+                    <x-label for="notes" value="Notes"/>
+                    <x-dk.form.textarea id="notes" name="notes" rows="3"
+                                        wire:model.blur="form.notes" class="w-full"/>
+                </div>
+            </x-slot>
+            <x-slot name="footer">
+                <x-secondary-button @click="$wire.showModal = false">Cancel</x-secondary-button>
+                <x-dk.form.button wire:click="checkout()" color="info" class="ml-2">Place order</x-dk.form.button>
+            </x-slot>
+        </x-dialog-modal>
 </div>

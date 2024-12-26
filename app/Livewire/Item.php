@@ -21,9 +21,6 @@ class Item extends Component
 
     protected function updateBasketView()
     {
-        var_dump(
-            Cart::getItems()
-        );
         // Directly retrieve the items from the session-based cart
         $this->basketItems = Cart::getItems();
     }

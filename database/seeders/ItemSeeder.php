@@ -20,6 +20,7 @@ class ItemSeeder extends Seeder
             'description' => 'Durable chew ball for dogs.',
             'price' => 9.99,
             'category' => ProductCategory::TOYS->value,
+            'stock' => 100,
         ]);
 
         Item::create([
@@ -27,6 +28,7 @@ class ItemSeeder extends Seeder
             'description' => 'High-quality kibble for dogs.',
             'price' => 29.99,
             'category' => ProductCategory::FOOD->value,
+            'stock' => 50,
         ]);
 
         Item::create([
@@ -34,6 +36,7 @@ class ItemSeeder extends Seeder
             'description' => 'Strong nylon leash for dogs.',
             'price' => 14.99,
             'category' => ProductCategory::ACCESSORIES->value,
+            'stock' => 80,
         ]);
 
         Item::create([
@@ -41,6 +44,7 @@ class ItemSeeder extends Seeder
             'description' => 'Comfortable large bed for dogs.',
             'price' => 49.99,
             'category' => ProductCategory::BEDS->value,
+            'stock' => 20,
         ]);
 
         Item::create([
@@ -48,6 +52,7 @@ class ItemSeeder extends Seeder
             'description' => 'Stylish leather collar for dogs.',
             'price' => 19.99,
             'category' => ProductCategory::ACCESSORIES->value,
+            'stock' => 30,
         ]);
 
         Item::create([
@@ -55,6 +60,7 @@ class ItemSeeder extends Seeder
             'description' => 'Gentle shampoo for dogs with sensitive skin.',
             'price' => 12.99,
             'category' => ProductCategory::GROOMING->value,
+            'stock' => 40,
         ]);
 
         Item::create([
@@ -62,6 +68,7 @@ class ItemSeeder extends Seeder
             'description' => 'Delicious chicken-flavored treats for dogs.',
             'price' => 7.99,
             'category' => ProductCategory::FOOD->value,
+            'stock' => 60,
         ]);
 
         Item::create([
@@ -69,6 +76,7 @@ class ItemSeeder extends Seeder
             'description' => 'Durable stainless steel bowl for dogs.',
             'price' => 8.99,
             'category' => ProductCategory::ACCESSORIES->value,
+            'stock' => 70,
         ]);
 
         Item::create([
@@ -76,6 +84,7 @@ class ItemSeeder extends Seeder
             'description' => 'Waterproof jacket to keep dogs dry.',
             'price' => 24.99,
             'category' => ProductCategory::CLOTHING->value,
+            'stock' => 10,
         ]);
 
         Item::create([
@@ -83,6 +92,7 @@ class ItemSeeder extends Seeder
             'description' => 'Medium-sized crate for dogs.',
             'price' => 59.99,
             'category' => ProductCategory::HOUSING->value,
+            'stock' => 5,
         ]);
     }
 }

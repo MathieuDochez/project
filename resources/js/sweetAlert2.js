@@ -1,4 +1,5 @@
 import Swal from 'sweetalert2';
+window.Swal = Swal;
 
 // toast with default settings and event listener
 window.addEventListener('swal:toast', event => {
