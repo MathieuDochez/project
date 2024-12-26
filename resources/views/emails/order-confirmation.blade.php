@@ -1,11 +1,7 @@
 <x-mail::message>
-# Introduction
+# Dear {{ auth()->user()->name }},
 
-The body of your message.
-
-<x-mail::button :url="''">
-Button Text
-</x-mail::button>
+{!! nl2br($data['message']) !!}
 
 Thanks,<br>
 {{ config('app.name') }}

@@ -119,6 +119,7 @@ class Basket extends Component
             $updateQty->stock > $item['qty'] ? $updateQty->stock -= $item['qty'] : $updateQty->stock = 0;
             $updateQty->save();
         }
+        $this->form->sendEmail($this->backorder);
     }
 
     public function emptyBasket()

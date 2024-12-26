@@ -23,11 +23,16 @@ class ReviewForm extends Component
             'comment' => $this->comment,
         ]);
 
+        // Reset input fields
         $this->reset(['rating', 'comment']);
+
+        // Update the parent's reviews property directly
+        $this->reviews = Review::all();
+
+        // Flash success message to the session
         session()->flash('success', 'Thank you for your feedback!');
 
-        // Emit an event to notify the parent component (optional)
-        $this->emit('reviewSubmitted');
+        return redirect()->route('reviews');
     }
 
     public function render()
