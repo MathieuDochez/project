@@ -29,8 +29,12 @@ class ReviewForm extends Component
         // Update the parent's reviews property directly
         $this->reviews = Review::all();
 
-        // Flash success message to the session
-        session()->flash('success', 'Thank you for your feedback!');
+        // Show a success message
+        $this->dispatch('swal:toast', [
+            'background' => 'success',
+            'timer' => 5000,
+            'html' => 'Successfully updated ',
+        ]);
 
         return redirect()->route('reviews');
     }
