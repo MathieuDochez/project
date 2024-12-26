@@ -51,68 +51,56 @@ class Basket extends Component
 
 namespace App\Livewire;
 
-use App\Models\Basket as BasketModel;
-use Illuminate\Support\Facades\Auth;
+use App\Helpers\Cart;
+use App\Models\Item as ItemModel;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Basket extends Component
 {
-    public $basketItems = []; // Holds the current user's basket items
-
-    public function mount()
-    {
-        $this->updateBasketView(); // Load basket data on mount
-    }
-
+    public $backorder = [];
     public function emptyBasket()
     {
-        BasketModel::where('user_id', Auth::id())->delete();
-        $this->updateBasketView(); // Refresh the basket data
+        Cart::empty();
+        $this->dispatch('basket-updated');
     }
 
-    public function decreaseQty($itemId)
+    public function decreaseQty(ItemModel $item)
     {
-        $basketItem = BasketModel::where('user_id', Auth::id())->where('item_id', $itemId)->first();
-        if ($basketItem && $basketItem->quantity > 1) {
-            $basketItem->decrement('quantity');
-        } else {
-            $basketItem?->delete();
+        Cart::delete($item);
+        $this->dispatch('basket-updated');
+    }
+
+    public function increaseQty(ItemModel $item)
+    {
+        Cart::add($item);
+        $this->dispatch('basket-updated');
+    }
+
+    public function updateBackorder()
+    {
+        $this->backorder = [];
+        // loop over records in basket and check if qty > in stock
+        foreach (Cart::getKeys() as $id) {
+            $qty = Cart::getOneItem($id)['qty'];
+            $item = ItemModel::findOrFail($id);
+            $shortage = $qty - $item->stock;
+            if ($shortage > 0)
+                $this->backorder[] = $shortage . ' x ' . $item->item;
         }
-
-        $this->updateBasketView(); // Refresh the basket data
     }
 
-    public function increaseQty($itemId)
-    {
-        $basketItem = BasketModel::firstOrCreate(
-            ['user_id' => Auth::id(), 'item_id' => $itemId],
-            ['quantity' => 0]
-        );
-        $basketItem->increment('quantity');
-
-        $this->updateBasketView(); // Refresh the basket data
-    }
-
-    public function placeOrder()
-    {
-        // Add order logic here (e.g., creating an Order model, clearing the basket)
-        // For now, let's just clear the basket after placing an "order"
-        $this->emptyBasket();
-    }
-
-    protected function updateBasketView()
-    {
-        $this->basketItems = BasketModel::where('user_id', Auth::id())
-            ->with('item')
-            ->get();
-    }
-
-    #[Layout('layouts.project', ['title' => 'Basket', 'description' => 'Dog kennel Item'])]
+    #[On('basket-updated')]
+    #[Layout('layouts.project', ['title' => 'Your shopping basket', 'description' => 'Your shopping basket',])]
     public function render()
     {
+        $this->updateBackorder();
+        @dump(Cart::getItems());
         return view('livewire.basket', [
-            'items' => $this->basketItems, // Pass updated basket data to the view
+            'totalQty' =>Cart::getTotalQty(),
+            'totalPrice' => Cart::getTotalPrice(),
+            'items' => Cart::getItems(),
         ]);
     }
 }
