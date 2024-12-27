@@ -15,9 +15,13 @@
         <x-nav-link href="{{ route('reviews') }}" :active="request()->routeIs('reviews')">
             Reviews
         </x-nav-link>
+        <x-nav-link href="{{ route('dog-gallery') }}" :active="request()->routeIs('dog-gallery')">
+            Dog Gallery
+        </x-nav-link>
         <x-nav-link href="{{ route('contact') }}" :active="request()->routeIs('contact')">
             Contact us
         </x-nav-link>
+
     </div>
 
     {{-- right navigation --}}
