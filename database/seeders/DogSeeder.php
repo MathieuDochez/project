@@ -20,7 +20,7 @@ class DogSeeder extends Seeder
             'age' => 3,
             'weight' => 30,
             'color' => 'Golden',
-            'owner_id' => 1,
+            'owner' => 'John Doe',
         ]);
 
         Dog::create([
@@ -29,7 +29,7 @@ class DogSeeder extends Seeder
             'age' => 2,
             'weight' => 25,
             'color' => 'Black',
-            'owner_id' => 2,
+            'owner' => 'Jane Doe',
         ]);
 
         Dog::create([
@@ -38,7 +38,7 @@ class DogSeeder extends Seeder
             'age' => 4,
             'weight' => 35,
             'color' => 'Brown',
-            'owner_id' => 3,
+            'owner' => 'John Smith',
         ]);
     }
 }

@@ -48,7 +48,7 @@
     document.querySelector("body > div > header > nav > div > div").remove();
 
     let link = document.createElement("a");
-    link.href = "{{ route('welcome') }}";
+    link.href = "{{ route('home') }}";
     link.innerText = "Home";
     document.querySelector("body > div > header > nav > div").appendChild(link);
 </script>

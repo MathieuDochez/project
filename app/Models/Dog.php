@@ -15,6 +15,6 @@ class Dog extends Model
         'age',
         'weight',
         'color',
-        'owner_id',
+        'owner',
     ];
 }

@@ -55,6 +55,11 @@
                     {{-- admins only --}}
                     <div class="block px-4 py-2 text-xs text-gray-400">Admin</div>
                     <x-dropdown-link href="{{ route('dashboard') }}">Dashboard</x-dropdown-link>
+                    <x-dropdown-link href="{{ route('dog') }}">Editing Dog's</x-dropdown-link>
+                    <x-dropdown-link href="{{ route('orders') }}">Editing orders</x-dropdown-link>
+                    <x-dropdown-link href="{{ route('items') }}">Editing items</x-dropdown-link>
+                    <x-dropdown-link href="{{ route('reviewcrud') }}">Editing reviews</x-dropdown-link>
+                    <x-dropdown-link href="{{ route('users') }}">Editing users</x-dropdown-link>
                 @endif
             </x-slot>
         </x-dropdown>

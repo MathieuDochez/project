@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('age');
             $table->integer('weight');
             $table->string('color');
-            $table->unsignedBigInteger('owner_id');
+            $table->string('owner');
             $table->timestamps();
         });
     }
