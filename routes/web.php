@@ -17,6 +17,9 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
+        if (!auth()->user()->admin) {
+            return redirect()->route('home');
+        }
         return view('dashboard');
     })->name('dashboard');
 });

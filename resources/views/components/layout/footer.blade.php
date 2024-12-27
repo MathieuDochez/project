@@ -1,45 +1,16 @@
-<footer class="container mx-auto p-4 text-sm border-t flex justify-between items-center">
-    <div>The Dog Kennel - © {{ date('Y') }}</div>
-    @env('local')
-        <div class="p-2 bg-gray-200 rounded-md"
-             x-data="{showIcons: false}"
-             @click="showIcons = true">
-            <div class="text-gray-400 text-xs text-center cursor-pointer ">
-                <span class="sm:hidden">&lt; 640</span>
-                <span class="hidden sm:block md:hidden">SM | 640 - 768</span>
-                <span class="hidden md:block lg:hidden">MD | 768 - 1024</span>
-                <span class="hidden lg:block xl:hidden">LG | 1024 - 1280</span>
-                <span class="hidden xl:block 2xl:hidden">XL | 1280 - 1536</span>
-                <span class="hidden 2xl:block">2XL |  &gt; 1536</span>
-            </div>
-            <div class="fixed left-0 right-0 bottom-16 p-2 mx-2 sm:mx-8
-                    rounded-md border shadow-lg bg-amber-200/25 backdrop-blur-sm
-                    flex justify-center space-x-4"
-                 x-show="showIcons"
-                 x-cloak
-                 x-transition.duration.300ms
-                 @click.outside="showIcons = false">
-
-                <x-layout.footer-icon target="_mail"
-                                      href="http://localhost:8025"
-                                      icon="si-maildotru"/>
-                <x-layout.footer-icon target="_icons"
-                                      href="https://blade-ui-kit.com/blade-icons"
-                                      icon="fas-icons"/>
-                <x-layout.footer-icon target="_tall"
-                                      href="https://tailwindcss.com/docs"
-                                      icon="si-tailwindcss"/>
-                <x-layout.footer-icon target="_tall"
-                                      href="https://alpinejs.dev/"
-                                      icon="si-alpinedotjs"/>
-                <x-layout.footer-icon target="_tall"
-                                      href="https://laravel.com/docs/11.x/"
-                                      icon="si-laravel"/>
-                <x-layout.footer-icon target="_tall"
-                                      href="https://livewire.laravel.com/docs"
-                                      icon="si-livewire"/>
-            </div>
-        </div>
-    @endenv
-    <div>Build with Laravel {{ app()->version() }}</div>
+<footer class="container mx-auto p-4 text-sm border-t flex flex-col items-center mt-8 bg-gray-800 text-white">
+    <div class="flex flex-col items-center w-full mb-4">
+        <p class="my-2 italic capitalize text-center text-gray-300">
+            Made by: Mathieu Dochez
+        </p>
+        <p class="text-center text-gray-400">Dog kennel - © {{ date('Y') }}</p>
+    </div>
+{{--    <div class="flex space-x-4">--}}
+{{--        <a href="https://x.com/MathieuDochez" class="text-gray-400 hover:text-white transition-colors">--}}
+{{--            <i class="fab fa-twitter"></i>--}}
+{{--        </a>--}}
+{{--        <a href="https://www.instagram.com/mathieu_dochez/" class="text-gray-400 hover:text-white transition-colors">--}}
+{{--            <i class="fab fa-instagram"></i>--}}
+{{--        </a>--}}
+{{--    </div>--}}
 </footer>

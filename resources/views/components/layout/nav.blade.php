@@ -1,3 +1,4 @@
+@php use http\Client\Curl\User; @endphp
 <nav class="container mx-auto p-4 flex justify-between">
     {{-- left navigation--}}
     <div class="flex items-center space-x-2">
@@ -42,7 +43,6 @@
             <x-slot name="content">
                 {{-- all users --}}
                 @livewire('partials.name')
-                <x-dropdown-link href="{{ route('dashboard') }}">Dashboard</x-dropdown-link>
                 <x-dropdown-link href="{{ route('profile.show') }}">Update Profile</x-dropdown-link>
                 <x-dropdown-link href="{{--{{ route('under-construction') }}--}}">Order history</x-dropdown-link>
                 <div class="border-t border-gray-100"></div>
@@ -54,11 +54,7 @@
                     <div class="border-t border-gray-100"></div>
                     {{-- admins only --}}
                     <div class="block px-4 py-2 text-xs text-gray-400">Admin</div>
-                    <x-dropdown-link href="{{--{{ route('under-construction') }}--}}">Genres</x-dropdown-link>
-                    <x-dropdown-link href="{{--{{ route('admin.records') }}--}}">Records</x-dropdown-link>
-                    <x-dropdown-link href="{{--{{ route('under-construction') }}--}}">Covers</x-dropdown-link>
-                    <x-dropdown-link href="{{--{{ route('under-construction') }}--}}">Users</x-dropdown-link>
-                    <x-dropdown-link href="{{--{{ route('under-construction') }}--}}">Orders</x-dropdown-link>
+                    <x-dropdown-link href="{{ route('dashboard') }}">Dashboard</x-dropdown-link>
                 @endif
             </x-slot>
         </x-dropdown>
