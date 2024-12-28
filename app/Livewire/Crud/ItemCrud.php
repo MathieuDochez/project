@@ -40,6 +40,11 @@ class ItemCrud extends Component
             'price' => $this->price,
         ]);
 
+        $this->dispatch('swal:toast', [
+            'background' => 'success',
+            'html' => 'Item successfully added!',
+        ]);
+
         $this->resetForm();
         $this->resetPage(); // Reset pagination
     }
@@ -67,6 +72,11 @@ class ItemCrud extends Component
             'price' => $this->price,
         ]);
 
+        $this->dispatch('swal:toast', [
+            'background' => 'success',
+            'html' => 'Item successfully updated!',
+        ]);
+
         $this->resetForm();
         $this->resetPage(); // Reset pagination
     }
@@ -75,6 +85,13 @@ class ItemCrud extends Component
     public function deleteItem(Item $item)
     {
         $item->delete();
+
+        $this->dispatch('swal:toast', [
+            'background' => 'error',
+            'html' => 'Item successfully deleted!',
+        ]);
+
+
         $this->resetPage(); // Reset pagination
     }
 

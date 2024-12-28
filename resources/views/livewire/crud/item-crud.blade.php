@@ -60,7 +60,7 @@
 
         <div>
             <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
-            <input type="number" id="price" wire:model="price" class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500" />
+            <input type="number" step="0.01" id="price" wire:model="price" class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500" />
             @error('price') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 

@@ -44,9 +44,10 @@ class UserCrud extends Component
         ]);
 
         $this->resetForm();
-        $this->dispatch('swal:success', [
+        $this->dispatch('swal:toast', [
+            'background' => 'success',
             'title' => 'User created',
-            'text' => "The user '{$this->name}' has been successfully created.",
+            'html' => "The user has been successfully created.",
         ]);
     }
 
@@ -77,9 +78,10 @@ class UserCrud extends Component
         ]);
 
         $this->resetForm();
-        $this->dispatch('swal:success', [
+        $this->dispatch('swal:toast', [
+            'background' => 'success',
             'title' => 'User updated',
-            'text' => "The user '{$this->name}' has been successfully updated.",
+            'html' => "The user has been successfully updated.",
         ]);
     }
 
@@ -88,7 +90,10 @@ class UserCrud extends Component
         $user = User::findOrFail($id);
         $user->delete();
 
-        $this->emit('userUpdated');
+        $this->dispatch('swal:toast', [
+            'background' => 'error',
+            'html' => 'User successfully Deleted!',
+        ]);
     }
 
     public function resetForm()

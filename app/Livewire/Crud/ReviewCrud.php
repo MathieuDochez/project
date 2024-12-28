@@ -31,7 +31,10 @@ class ReviewCrud extends Component
         ]);
 
         $this->resetForm();
-        $this->emit('reviewUpdated');
+        $this->dispatch('swal:toast', [
+            'background' => 'success',
+            'html' => 'Review successfully added!',
+        ]);
     }
 
     public function editReview($id)
@@ -54,7 +57,10 @@ class ReviewCrud extends Component
         ]);
 
         $this->resetForm();
-        $this->emit('reviewUpdated');
+        $this->dispatch('swal:toast', [
+            'background' => 'success',
+            'html' => 'Review successfully updated!',
+        ]);
     }
 
     public function deleteReview($id)
@@ -62,7 +68,10 @@ class ReviewCrud extends Component
         $review = Review::findOrFail($id);
         $review->delete();
 
-        $this->emit('reviewUpdated');
+        $this->dispatch('swal:toast', [
+            'background' => 'error',
+            'html' => 'Review successfully deleted!',
+        ]);
     }
 
     private function resetForm()
