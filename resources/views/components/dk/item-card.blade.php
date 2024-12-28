@@ -8,6 +8,7 @@
             <p class="text-lg font-medium">{{ $item->name }}</p>
             <p class="italic pb-2">{{ $item->description }}</p>
             <p class="italic font-thin text-right pt-2 mb-2">{{ $item->category }}</p>
+            <p class="text-lg text-right">€{{ number_format($item->price, 2) }}</p>
         </div>
         <div class="flex justify-between border-t border-gray-300 bg-gray-100 px-4 py-2" x-show="showDetails">
             <div x-text="inStock > 0 ? inStock + ' items left in stock' : 'Out of stock'" class="text-sm"></div>
