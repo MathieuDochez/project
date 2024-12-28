@@ -1,9 +1,8 @@
-<div>
-    @if (session()->has('success'))
-        <div class="alert alert-success mb-4">
-            {{ session('success') }}
-        </div>
-    @endif
+<div x-data="{ successMessage: @entangle('success') }">
+    <!-- Success message -->
+    <div x-show="successMessage" class="alert alert-success mb-4">
+        <span x-text="successMessage"></span>
+    </div>
 
     <form wire:submit.prevent="submitReview">
         <div class="mb-4">

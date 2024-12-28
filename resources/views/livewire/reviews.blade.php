@@ -1,11 +1,13 @@
-<div class="container mx-auto p-4">
-    @auth
+<div x-data="{ isAuthenticated: @json(auth()->check()) }" class="container mx-auto p-4">
+    <div x-show="isAuthenticated">
         <!-- Only show the form if the user is logged in -->
         @livewire('review-form')
-    @else
+    </div>
+
+    <div x-show="!isAuthenticated">
         <!-- Display a message if the user is not logged in -->
         <p>Please <a href="{{ route('login') }}" class="text-blue-600">log in</a> to submit a review.</p>
-    @endauth
+    </div>
 
     <hr class="my-6">
 
@@ -22,6 +24,9 @@
     </div>
 
     <div class="mt-4">
-        {{ $reviews->links() }} <!-- Pagination links -->
+        <div x-data="{ currentPage: @entangle('reviews.current_page') }">
+            <!-- Pagination links -->
+            {{ $reviews->links() }}
+        </div>
     </div>
 </div>

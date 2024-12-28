@@ -5,7 +5,6 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
-                <!-- Office Information Section -->
                 <div class="mb-8">
                     <h3 class="text-2xl font-semibold text-gray-800 mb-4">Our Office</h3>
                     <p class="text-gray-600">Kleinhoefstraat 4, 2440 Geel</p>
@@ -13,20 +12,24 @@
                     <p class="text-gray-600">Email: info@example.com</p>
                 </div>
 
-                <div class="mb-8">
-                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">About Us</h3>
-                    <p class="text-gray-600">
-                        At <strong>Our Company</strong>, we believe in delivering exceptional experiences to our clients. Founded in 2010, our team of passionate professionals has been dedicated to providing high-quality services with a focus on integrity, creativity, and customer satisfaction. Over the years, we've had the privilege of working with a diverse range of clients, helping them achieve their goals with innovative solutions and personalized attention.
-                    </p>
-                    <p class="text-gray-600 mt-4">
-                        Our mission is to make a positive impact on the businesses and communities we serve. We value collaboration, transparency, and continuous improvement, striving to exceed expectations in everything we do. Whether you’re looking for expert advice, reliable service, or a team that truly understands your needs, we’re here to help.
-                    </p>
-                    <p class="text-gray-600 mt-4">
-                        Located in the heart of Geel, we’re always open to new ideas and opportunities. Feel free to reach out to us for any inquiries, suggestions, or simply to say hello. We look forward to working with you!
-                    </p>
+                <div x-data="{ isOpen: false }" class="mb-8">
+                    <h3 @click="isOpen = !isOpen" class="text-2xl font-semibold text-gray-800 mb-4 cursor-pointer">
+                        About Us <span x-show="!isOpen" class="text-sm text-gray-500">+ Show More</span>
+                        <span x-show="isOpen" class="text-sm text-gray-500">- Show Less</span>
+                    </h3>
+                    <div x-show="isOpen" class="text-gray-600">
+                        <p>
+                            At <strong>Our Company</strong>, we believe in delivering exceptional experiences to our clients. Founded in 2010, our team of passionate professionals has been dedicated to providing high-quality services with a focus on integrity, creativity, and customer satisfaction. Over the years, we've had the privilege of working with a diverse range of clients, helping them achieve their goals with innovative solutions and personalized attention.
+                        </p>
+                        <p class="mt-4">
+                            Our mission is to make a positive impact on the businesses and communities we serve. We value collaboration, transparency, and continuous improvement, striving to exceed expectations in everything we do. Whether you’re looking for expert advice, reliable service, or a team that truly understands your needs, we’re here to help.
+                        </p>
+                        <p class="mt-4">
+                            Located in the heart of Geel, we’re always open to new ideas and opportunities. Feel free to reach out to us for any inquiries, suggestions, or simply to say hello. We look forward to working with you!
+                        </p>
+                    </div>
                 </div>
 
-                <!-- Map Section -->
                 <div class="mb-8">
                     <h3 class="text-2xl font-semibold text-gray-800 mb-4">Find Us Here</h3>
                     <div class="relative overflow-hidden pb-[56.25%] mb-4 rounded-lg shadow-lg">
