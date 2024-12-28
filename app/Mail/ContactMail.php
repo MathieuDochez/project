@@ -18,7 +18,7 @@ class ContactMail extends Mailable
     {
         $this->name = $name;
         $this->email = $email;
-        $this->message = $message;
+        $this->message = (string) $message;
     }
 
     public function build()

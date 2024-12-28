@@ -21,9 +21,10 @@ class ContactForm extends Component
             'message' => 'required',
         ]);
 
+        $message = (string) $this->message;
         // Send email
-        $template = new ContactMail($this->name, $this->email, $this->message);
-        $to = new Address($this->email, $this->name);
+        $template = new ContactMail($this->name, $this->email, $message);
+        $to = new Address('test1@example.com', 'Test User');
         Mail::to($to)
             ->send($template);
 
