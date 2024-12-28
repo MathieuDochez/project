@@ -15,11 +15,11 @@
                     <div class="col-span-3 bg-gray-800 text-white p-4 rounded-lg shadow-md">
                         <h3 class="text-lg font-semibold mb-4">Navigation</h3>
                         <div class="space-y-2">
-                            <x-dropdown-link href="{{ route('dog') }}" class="text-white hover:bg-gray-600 p-2 rounded-md">Editing Dog's</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('orders') }}" class="text-white hover:bg-gray-600 p-2 rounded-md">Editing Orders</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('items') }}" class="text-white hover:bg-gray-600 p-2 rounded-md">Editing Items</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('reviewcrud') }}" class="text-white hover:bg-gray-600 p-2 rounded-md">Editing Reviews</x-dropdown-link>
-                            <x-dropdown-link href="{{ route('users') }}" class="text-white hover:bg-gray-600 p-2 rounded-md">Editing Users</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('admin.dog') }}" class="text-white hover:bg-gray-600 p-2 rounded-md">Editing Dog's</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('admin.orders') }}" class="text-white hover:bg-gray-600 p-2 rounded-md">Editing Orders</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('admin.items') }}" class="text-white hover:bg-gray-600 p-2 rounded-md">Editing Items</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('admin.reviewcrud') }}" class="text-white hover:bg-gray-600 p-2 rounded-md">Editing Reviews</x-dropdown-link>
+                            <x-dropdown-link href="{{ route('admin.users') }}" class="text-white hover:bg-gray-600 p-2 rounded-md">Editing Users</x-dropdown-link>
                         </div>
                     </div>
 

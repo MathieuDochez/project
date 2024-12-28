@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\Admin;
 use App\Livewire\Crud\DogCrud;
 use App\Livewire\Crud\ItemCrud;
 use App\Livewire\Crud\OrderCrud;
@@ -13,38 +14,22 @@ use App\Livewire\Basket;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
+// All users
 Route::view('/', 'home')->name('home');
 Route::get('shop', Item::class)->name('shop');
 Route::get('reviews', Reviews::class)->name('reviews');
 Route::view('contact', 'contact')->name('contact');
 Route::get('basket', Basket::class)->name('basket');
 Route::get('dog-gallery', DogGallery::class)->name('dog-gallery');
-Route::get('dog', DogCrud::class)->name('dog');
-Route::get('orders', OrderCrud::class)->name('orders');
-Route::get('items', ItemCrud::class)->name('items');
-Route::get('reviewcrud', ReviewCrud::class)->name('reviewcrud');
-Route::get('users', UserCrud::class)->name('users');
 Route::get('order-history', OrderHistory::class)->name('order-history');
 
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    // Admin-only Dashboard route
-    Route::get('/dashboard', function () {
-        if (!auth()->user()->admin) {
-            return redirect()->route('home');
-        }
+// Admin
+Route::middleware(['auth', Admin::class])->prefix('admin')->name('admin.')->group(function () {     Route::get('dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-
-    // Admin-only Dog CRUD route
-    /*Route::get('/dog', function () {
-        if (!auth()->user()->admin) {
-            return redirect()->route('home');
-        }
-        return Route::get('dog', DogCrud::class);
-    })->name('dog');*/
+    Route::get('dog', DogCrud::class)->name('dog');
+    Route::get('orders', OrderCrud::class)->name('orders');
+    Route::get('items', ItemCrud::class)->name('items');
+    Route::get('reviewcrud', ReviewCrud::class)->name('reviewcrud');
+    Route::get('users', UserCrud::class)->name('users');
 });
