@@ -1,29 +1,27 @@
-<div class="p-6 bg-gray-100 rounded-lg shadow-md">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">{{ $isEditing ? 'Edit Review' : 'Create Review' }}</h1>
+<div x-data="{ isEditing: @entangle('isEditing'), rating: @entangle('rating'), comment: @entangle('comment') }" class="p-6 bg-gray-100 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6" x-text="isEditing ? 'Edit Review' : 'Create Review'"></h1>
 
     <!-- Review Form -->
-    <form wire:submit.prevent="{{ $isEditing ? 'updateReview' : 'createReview' }}" class="space-y-6 bg-white p-6 rounded-lg shadow-md">
+    <form wire:submit.prevent="isEditing ? updateReview : createReview" class="space-y-6 bg-white p-6 rounded-lg shadow-md">
         <div>
             <label for="rating" class="block text-sm font-medium text-gray-700">Rating (1-5)</label>
-            <input type="number" id="rating" wire:model="rating" min="1" max="5" class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500">
+            <input type="number" id="rating" x-model="rating" wire:model="rating" min="1" max="5" class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500">
             @error('rating') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <div>
             <label for="comment" class="block text-sm font-medium text-gray-700">Comment</label>
-            <textarea id="comment" wire:model="comment" class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"></textarea>
+            <textarea id="comment" x-model="comment" wire:model="comment" class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"></textarea>
             @error('comment') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <div class="flex space-x-4 justify-center">
             <button type="submit" class="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-                {{ $isEditing ? 'Update Review' : 'Create Review' }}
+                <span x-text="isEditing ? 'Update Review' : 'Create Review'"></span>
             </button>
-            @if($isEditing)
-                <button type="button" wire:click="resetForm" class="px-6 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
-                    Cancel
-                </button>
-            @endif
+            <button x-show="isEditing" @click="rating = ''; comment = ''" type="button" wire:click="resetForm" class="px-6 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                Cancel
+            </button>
         </div>
     </form>
 

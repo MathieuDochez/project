@@ -1,4 +1,4 @@
-<div class="p-6 bg-gray-100 rounded-lg shadow-md">
+<div class="p-6 bg-gray-100 rounded-lg shadow-md" x-data="{ isEditing: @entangle('isEditing'), showForm: false }">
     <h2 class="text-2xl font-bold text-gray-800 mb-6">Dogs List</h2>
 
     <!-- Display the list of dogs -->
@@ -24,7 +24,7 @@
                     <td class="py-2 px-4">{{ $dog->weight }}</td>
                     <td class="py-2 px-4">{{ $dog->color }}</td>
                     <td class="py-2 px-4">{{ $dog->owner }}</td>
-                    <td class="py-2 text-center ">
+                    <td class="py-2 text-center">
                         <div class="flex justify-center space-x-4">
                             <button
                                 wire:click="editDog({{ $dog->id }})"
@@ -47,78 +47,91 @@
         </table>
     </div>
 
+    <!-- Button to toggle form visibility -->
+    <button
+        @click="showForm = !showForm"
+        class="px-6 py-2 mt-4 bg-green-500 text-white rounded hover:bg-green-600">
+        {{ $isEditing ? 'Cancel Edit' : 'Add Dog' }}
+    </button>
+
     <!-- Form for adding/updating a dog -->
-    <h3 class="text-xl font-semibold text-gray-800 mt-8 mb-4">{{ $isEditing ? 'Edit' : 'Add' }} Dog</h3>
-    <form
-        wire:submit.prevent="{{ $isEditing ? 'updateDog' : 'createDog' }}"
-        class="space-y-4 bg-white p-6 rounded-lg shadow-md">
+    <div x-show="showForm" @keydown.escape="showForm = false" x-transition class="mt-8">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">{{ $isEditing ? 'Edit' : 'Add' }} Dog</h3>
+        <form wire:submit.prevent="{{ $isEditing ? 'updateDog' : 'createDog' }}" class="space-y-4 bg-white p-6 rounded-lg shadow-md">
 
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Name</label>
-            <input
-                type="text"
-                wire:model="name"
-                class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
-                required>
-        </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Name</label>
+                <input
+                    type="text"
+                    wire:model="name"
+                    x-model="name"
+                    class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
+                    required>
+            </div>
 
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Breed</label>
-            <input
-                type="text"
-                wire:model="breed"
-                class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
-                required>
-        </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Breed</label>
+                <input
+                    type="text"
+                    wire:model="breed"
+                    x-model="breed"
+                    class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
+                    required>
+            </div>
 
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Age</label>
-            <input
-                type="number"
-                wire:model="age"
-                class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
-                required>
-        </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Age</label>
+                <input
+                    type="number"
+                    wire:model="age"
+                    x-model="age"
+                    class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
+                    required>
+            </div>
 
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Weight (kg)</label>
-            <input
-                type="number"
-                wire:model="weight"
-                class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
-                required>
-        </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Weight (kg)</label>
+                <input
+                    type="number"
+                    wire:model="weight"
+                    x-model="weight"
+                    class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
+                    required>
+            </div>
 
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Color</label>
-            <input
-                type="text"
-                wire:model="color"
-                class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
-                required>
-        </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Color</label>
+                <input
+                    type="text"
+                    wire:model="color"
+                    x-model="color"
+                    class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
+                    required>
+            </div>
 
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Owner</label>
-            <input
-                type="text"
-                wire:model="owner"
-                class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
-                required>
-        </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Owner</label>
+                <input
+                    type="text"
+                    wire:model="owner"
+                    x-model="owner"
+                    class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
+                    required>
+            </div>
 
-        <div class="flex items-center space-x-4">
-            <button
-                type="submit"
-                class="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600">
-                {{ $isEditing ? 'Update' : 'Add' }} Dog
-            </button>
-            <button
-                type="button"
-                wire:click="resetForm"
-                class="px-6 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
-                Cancel
-            </button>
-        </div>
-    </form>
+            <div class="flex items-center space-x-4">
+                <button
+                    type="submit"
+                    class="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                    {{ $isEditing ? 'Update' : 'Add' }} Dog
+                </button>
+                <button
+                    type="button"
+                    wire:click="resetForm"
+                    class="px-6 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
 </div>

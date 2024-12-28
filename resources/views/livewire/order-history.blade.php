@@ -23,16 +23,18 @@
                 @endforeach
                 </tbody>
             @else
+                <tbody>
                 <tr class="border-t hover:bg-gray-100">
-                    <td class="py-2 px-4 text-red-700">No orders available at the moment.</td>
+                    <td colspan="3" class="py-2 px-4 text-center text-red-700">No orders available at the moment.</td>
                 </tr>
+                </tbody>
             @endif
         </table>
     </div>
 
     <!-- Pagination Controls -->
     @if($paginate)
-        <div>
+        <div class="mt-4">
             {{ $paginate->links() }}
         </div>
     @endif
