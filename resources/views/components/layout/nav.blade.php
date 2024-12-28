@@ -48,7 +48,7 @@
                 {{-- all users --}}
                 @livewire('partials.name')
                 <x-dropdown-link href="{{ route('profile.show') }}">Update Profile</x-dropdown-link>
-                <x-dropdown-link href="{{--{{ route('under-construction') }}--}}">Order history</x-dropdown-link>
+                <x-dropdown-link href="{{ route('order-history') }}">Order history</x-dropdown-link>
                 <div class="border-t border-gray-100"></div>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

@@ -6,6 +6,7 @@ use App\Livewire\Crud\OrderCrud;
 use App\Livewire\Crud\ReviewCrud;
 use App\Livewire\Crud\UserCrud;
 use App\Livewire\DogGallery;
+use App\Livewire\OrderHistory;
 use App\Livewire\Reviews;
 use App\Livewire\Item;
 use App\Livewire\Basket;
@@ -23,6 +24,7 @@ Route::get('orders', OrderCrud::class)->name('orders');
 Route::get('items', ItemCrud::class)->name('items');
 Route::get('reviewcrud', ReviewCrud::class)->name('reviewcrud');
 Route::get('users', UserCrud::class)->name('users');
+Route::get('order-history', OrderHistory::class)->name('order-history');
 
 
 Route::middleware([
