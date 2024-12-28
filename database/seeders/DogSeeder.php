@@ -18,7 +18,7 @@ class DogSeeder extends Seeder
             'name' => 'Buddy',
             'breed' => 'Golden Retriever',
             'age' => 3,
-            'weight' => 30,
+            'weight' => 3,
             'color' => 'Golden',
             'owner' => 'John Doe',
         ]);
@@ -27,7 +27,7 @@ class DogSeeder extends Seeder
             'name' => 'Max',
             'breed' => 'Labrador Retriever',
             'age' => 2,
-            'weight' => 25,
+            'weight' => 2.5,
             'color' => 'Black',
             'owner' => 'Jane Doe',
         ]);
@@ -36,7 +36,7 @@ class DogSeeder extends Seeder
             'name' => 'Bella',
             'breed' => 'German Shepherd',
             'age' => 4,
-            'weight' => 35,
+            'weight' => 3.5,
             'color' => 'Brown',
             'owner' => 'John Smith',
         ]);

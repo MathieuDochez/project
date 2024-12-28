@@ -81,7 +81,7 @@
         </div>
 
         <div>
-            <label class="block text-sm font-medium text-gray-700">Weight</label>
+            <label class="block text-sm font-medium text-gray-700">Weight (kg)</label>
             <input
                 type="number"
                 wire:model="weight"

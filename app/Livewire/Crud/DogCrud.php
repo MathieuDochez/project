@@ -23,7 +23,7 @@ class DogCrud extends Component
         $this->validate([
             'name' => 'required|string|max:255',
             'breed' => 'required|string|max:255',
-            'age' => 'required|integer|min:0',
+            'age' => 'required|numeric|min:0.1',
             'weight' => 'required|numeric|min:0.1',
             'color' => 'required|string|max:255',
             'owner' => 'string|max:255',  // Assuming you have an Owner model
@@ -66,7 +66,7 @@ class DogCrud extends Component
         $this->validate([
             'name' => 'required|string|max:255',
             'breed' => 'required|string|max:255',
-            'age' => 'required|integer|min:0',
+            'age' => 'required|numeric|min:0.1',
             'weight' => 'required|numeric|min:0.1',
             'color' => 'required|string|max:255',
             'owner' => 'string|max:255',  // Assuming you have an Owner model

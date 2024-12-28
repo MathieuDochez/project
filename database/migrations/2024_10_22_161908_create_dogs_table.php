@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('breed');
-            $table->integer('age');
-            $table->integer('weight');
+            $table->float('age');
+            $table->float('weight');
             $table->string('color');
             $table->string('owner');
             $table->timestamps();
