@@ -9,32 +9,30 @@ use Livewire\Component;
 class OrderCrud extends Component
 {
     public $orders;
+    public $paginate;
     public $order_id, $user_id, $total_price;
     public $isEditing = false;
 
     // Mount method to fetch orders from the database
     public function mount()
     {
-        $this->orders = Order::with('user', 'orderline')->paginate(10);
+        $this->loadOrders();
     }
 
-    // Method to handle creating a new order
-    public function store()
+    public function loadOrders()
     {
-        $this->validate([
-            'user_id' => 'required|exists:users,id',  // Ensure user exists
-            'price' => 'required|numeric|min:0',  // Ensure price is valid
-        ]);
+        $totalOrders = Order::count();
 
-        Order::create([
-            'user_id' => $this->user_id,
-            'price' => $this->total_price,
-        ]);
-
-        $this->resetForm();
-        $this->dispatch('swal:toast', ['background' => 'success', 'html' => 'Order created successfully!']);
-        $this->mount();  // Refresh orders list
+        if ($totalOrders > 10) {
+            $this->paginate = true;
+            $this->orders = Order::paginate(10); // Adjust pagination per page count as needed
+        } else {
+            $this->paginate = false;
+            $this->orders = Order::all(); // Retrieve all orders
+        }
     }
+
+
 
     // Method to handle updating an existing order
     public function edit($id)
@@ -43,7 +41,7 @@ class OrderCrud extends Component
         $order = Order::findOrFail($id);
         $this->order_id = $order->id;
         $this->user_id = $order->user_id;
-        $this->total_price = $order->total_price;
+        $this->total_price = $order->getTotalPriceAttribute();
     }
 
     // Method to handle saving updates
@@ -51,13 +49,20 @@ class OrderCrud extends Component
     {
         $this->validate([
             'user_id' => 'required|exists:users,id',
-            'price' => 'required|numeric|min:0',
+            'total_price' => 'required|numeric|min:0.01',
         ]);
 
-        $order = Order::findOrFail($this->order_id);
+        $order = Order::find($this->order_id);
+        $orderline = $order->orderline; // Assuming a one-to-one relationship
+
+        // Update the user_id on the order
         $order->update([
-            'user_id' => $this->user_id,
-            'price' => $this->total_price,
+            'user_id' => $this->user_id,  // Updating the user ID
+        ]);
+
+        // Update the price on the related orderline
+        $orderline->update([
+            'price' => $this->total_price,  // Update the price in the orderline
         ]);
 
         $this->resetForm();

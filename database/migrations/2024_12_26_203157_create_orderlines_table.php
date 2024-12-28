@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('orderlines', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained();
+            $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->integer('quantity');
             $table->decimal('price', 8, 2);
             $table->timestamps();
