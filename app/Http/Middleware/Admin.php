@@ -8,11 +8,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Admin
 {
-    public function handle($request, Closure $next): Response
+    /**
+     * Handle an incoming request.
+     */
+    public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->user()->admin) {
-            return $next($request);
+        if (!auth()->check()) {
+            return redirect()->route('login');
         }
-        return redirect(route('home'));
+
+        if (!auth()->user()->admin) {
+            abort(403, 'Access denied. Admin privileges required.');
+        }
+
+        return $next($request);
     }
 }

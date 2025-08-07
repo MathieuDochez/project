@@ -24,7 +24,8 @@ Route::get('dog-gallery', DogGallery::class)->name('dog-gallery');
 Route::get('order-history', OrderHistory::class)->name('order-history');
 
 // Admin
-Route::middleware(['auth', Admin::class])->prefix('admin')->name('admin.')->group(function () {     Route::get('dashboard', function () {
+Route::middleware(['auth', Admin::class])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
     Route::get('dog', DogCrud::class)->name('dog');

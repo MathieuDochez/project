@@ -14,8 +14,14 @@ return new class extends Migration
         Schema::create('orderlines', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
+
+            // Add the fields your existing Basket component needs
+            $table->string('name');
+            $table->text('description');
             $table->integer('quantity');
             $table->decimal('price', 8, 2);
+            $table->decimal('total_price', 8, 2);
+
             $table->timestamps();
         });
     }

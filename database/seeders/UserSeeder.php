@@ -13,7 +13,15 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::truncate(); // Clear existing data
+        User::truncate();
+
+        User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'email_verified_at' => now(),
+            'admin' => true,
+            'password' => 'adminpassword',
+            'remember_token' => \Str::random(10),]);
 
         User::create([
             'name' => 'Test User 1',

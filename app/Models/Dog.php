@@ -17,4 +17,27 @@ class Dog extends Model
         'color',
         'owner',
     ];
+
+    protected $casts = [
+        'age' => 'float',
+        'weight' => 'float',
+    ];
+
+    // Scope for filtering by breed
+    public function scopeByBreed($query, $breed)
+    {
+        return $query->where('breed', $breed);
+    }
+
+    // Accessor for formatted age
+    public function getFormattedAgeAttribute()
+    {
+        return $this->age . ' year' . ($this->age != 1 ? 's' : '');
+    }
+
+    // Accessor for formatted weight
+    public function getFormattedWeightAttribute()
+    {
+        return $this->weight . ' kg';
+    }
 }

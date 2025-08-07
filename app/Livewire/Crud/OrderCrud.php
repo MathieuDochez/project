@@ -5,34 +5,14 @@ use App\Models\Order;
 use App\Models\User;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class OrderCrud extends Component
 {
-    public $orders;
-    public $paginate;
+    use WithPagination;
+
     public $order_id, $user_id, $total_price;
     public $isEditing = false;
-
-    // Mount method to fetch orders from the database
-    public function mount()
-    {
-        $this->loadOrders();
-    }
-
-    public function loadOrders()
-    {
-        $totalOrders = Order::count();
-
-        if ($totalOrders > 10) {
-            $this->paginate = true;
-            $this->orders = Order::paginate(10); // Adjust pagination per page count as needed
-        } else {
-            $this->paginate = false;
-            $this->orders = Order::all(); // Retrieve all orders
-        }
-    }
-
-
 
     // Method to handle updating an existing order
     public function edit($id)
@@ -41,7 +21,7 @@ class OrderCrud extends Component
         $order = Order::findOrFail($id);
         $this->order_id = $order->id;
         $this->user_id = $order->user_id;
-        $this->total_price = $order->getTotalPriceAttribute();
+        $this->total_price = $order->total_price; // Use the actual total_price from database
     }
 
     // Method to handle saving updates
@@ -53,21 +33,15 @@ class OrderCrud extends Component
         ]);
 
         $order = Order::find($this->order_id);
-        $orderline = $order->orderline; // Assuming a one-to-one relationship
 
-        // Update the user_id on the order
+        // Update the order
         $order->update([
-            'user_id' => $this->user_id,  // Updating the user ID
-        ]);
-
-        // Update the price on the related orderline
-        $orderline->update([
-            'price' => $this->total_price,  // Update the price in the orderline
+            'user_id' => $this->user_id,
+            'total_price' => $this->total_price,
         ]);
 
         $this->resetForm();
         $this->dispatch('swal:toast', ['background' => 'success', 'html' => 'Order updated successfully!']);
-        $this->mount();  // Refresh orders list
     }
 
     // Method to handle deleting an order
@@ -75,7 +49,6 @@ class OrderCrud extends Component
     {
         Order::findOrFail($id)->delete();
         $this->dispatch('swal:toast', ['background' => 'error', 'html' => 'Order deleted successfully!']);
-        $this->mount();  // Refresh orders list
     }
 
     // Method to reset the form fields
@@ -91,9 +64,11 @@ class OrderCrud extends Component
     #[Layout('layouts.project', ['title' => '', 'description' => 'Dog kennel Item'])]
     public function render()
     {
+        // Load orders with user and orderlines relationships
+        $orders = Order::with(['user', 'orderlines'])->latest()->paginate(10);
 
         return view('livewire.crud.order-crud', [
-            'orders' => $this->orders,
+            'orders' => $orders,
         ]);
     }
 }

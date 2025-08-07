@@ -52,15 +52,13 @@ class ReviewCrud extends Component
 
         $review = Review::findOrFail($this->reviewId);
         $review->update([
+            'review_id' => $this->reviewId,
             'rating' => $this->rating,
             'comment' => $this->comment,
         ]);
 
         $this->resetForm();
-        $this->dispatch('swal:toast', [
-            'background' => 'success',
-            'html' => 'Review successfully updated!',
-        ]);
+
     }
 
     public function deleteReview($id)
@@ -74,12 +72,15 @@ class ReviewCrud extends Component
         ]);
     }
 
-    private function resetForm()
+    public function resetForm()
     {
         $this->rating = '';
         $this->comment = '';
-        $this->reviewId = null;
         $this->isEditing = false;
+        // $this->editingReviewId = null;
+        // $this->user_id = '';
+
+        $this->resetValidation(); // Clear validation errors
     }
 
     #[Layout('layouts.project', ['title' => '', 'description' => 'Dog kennel Item'])]

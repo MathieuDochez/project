@@ -43,13 +43,12 @@ class ShippingForm extends Form
             }
             $message .= '</ul>';
         }
-        // Get all admins
-        $admins = User::where('admin', true)->select('name', 'email')->get();
+
         $template = new OrderConfirmation([
             'message' => $message,
         ]);
-        Mail::to(auth()->user())
-            ->cc($admins)
-            ->send($template);
+
+        // Send email ONLY to the customer (removed admin CC)
+        Mail::to(auth()->user())->send($template);
     }
 }

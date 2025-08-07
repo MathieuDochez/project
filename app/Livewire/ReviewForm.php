@@ -41,10 +41,6 @@ class ReviewForm extends Component
 
     public function render()
     {
-        if (!auth()->check()) {
-            return view('livewire.review-form-guest'); // View for guests not logged in
-        }
-
-        return view('livewire.review-form'); // Default form for logged-in users
+        return view('livewire.review-form');
     }
 }

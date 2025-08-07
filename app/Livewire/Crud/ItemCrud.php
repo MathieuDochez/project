@@ -96,13 +96,18 @@ class ItemCrud extends Component
     }
 
     // Reset form fields
-    private function resetForm()
+    public function resetForm()
     {
         $this->name = '';
         $this->description = '';
         $this->price = '';
         $this->isEditing = false;
-        $this->editItemId = null;
+
+        // $this->category = '';
+        // $this->stock = '';
+        // $this->editingItemId = null;
+
+        $this->resetValidation();
     }
 
     #[Layout('layouts.project', ['title' => '', 'description' => 'Dog kennel Item'])]

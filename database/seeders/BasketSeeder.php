@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Basket;
-use App\Models\User;
-use App\Models\Item;
 use Illuminate\Database\Seeder;
 
 class BasketSeeder extends Seeder
@@ -12,16 +10,10 @@ class BasketSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run()
+    public function run(): void
     {
-        // Assuming the user and items exist in your database
-        $user = User::first();
-        $item = Item::first();
+        Basket::truncate();
 
-        Basket::create([
-            'user_id' => $user->id,
-            'item_id' => $item->id,
-            'quantity' => 1,
-        ]);
+        echo "Basket table cleared. Users can now add items through the shop.\n";
     }
 }
