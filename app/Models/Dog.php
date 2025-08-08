@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,28 +15,6 @@ class Dog extends Model
         'weight',
         'color',
         'owner',
+        'additional_info', // Add this field
     ];
-
-    protected $casts = [
-        'age' => 'float',
-        'weight' => 'float',
-    ];
-
-    // Scope for filtering by breed
-    public function scopeByBreed($query, $breed)
-    {
-        return $query->where('breed', $breed);
-    }
-
-    // Accessor for formatted age
-    public function getFormattedAgeAttribute()
-    {
-        return $this->age . ' year' . ($this->age != 1 ? 's' : '');
-    }
-
-    // Accessor for formatted weight
-    public function getFormattedWeightAttribute()
-    {
-        return $this->weight . ' kg';
-    }
 }

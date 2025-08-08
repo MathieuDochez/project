@@ -1,4 +1,5 @@
 <?php
+// database/migrations/2024_10_22_161908_create_dogs_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->float('weight');
             $table->string('color');
             $table->string('owner');
+            $table->text('additional_info')->nullable(); // Add this line
             $table->timestamps();
         });
     }

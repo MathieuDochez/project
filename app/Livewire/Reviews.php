@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Livewire;
 
 use App\Models\Review;
@@ -13,11 +12,39 @@ class Reviews extends Component
 
     protected $listeners = ['reviewSubmitted' => '$refresh'];
 
-    #[Layout('layouts.project', ['title' => 'Reviews', 'description' => 'Reviews of our products'])]
-    public function render()
+    public function getReviewStatistics()
     {
-        $reviews = Review::latest()->with('user')->paginate(10);
-        return view('livewire.reviews', compact('reviews'));
+        $reviews = Review::all();
+
+        return [
+            'total' => $reviews->count(),
+            'average' => $reviews->avg('rating') ?? 0,
+            'distribution' => [
+                5 => $reviews->where('rating', 5)->count(),
+                4 => $reviews->where('rating', 4)->count(),
+                3 => $reviews->where('rating', 3)->count(),
+                2 => $reviews->where('rating', 2)->count(),
+                1 => $reviews->where('rating', 1)->count(),
+            ]
+        ];
     }
 
+    #[Layout('layouts.project', [
+        'title' => 'Reviews - The Dog Kennel',
+        'subtitle' => 'Customer Reviews',
+        'description' => 'Read authentic reviews from our satisfied customers and share your own experience with The Dog Kennel'
+    ])]
+    public function render()
+    {
+        $reviews = Review::latest()
+            ->with('user')
+            ->paginate(10);
+
+        $stats = $this->getReviewStatistics();
+
+        return view('livewire.reviews', [
+            'reviews' => $reviews,
+            'stats' => $stats
+        ]);
+    }
 }

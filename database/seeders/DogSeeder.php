@@ -21,6 +21,7 @@ class DogSeeder extends Seeder
             'weight' => 3,
             'color' => 'Golden',
             'owner' => 'John Doe',
+            'additional_info' => 'Friendly and playful, up for adoption.',
         ]);
 
         Dog::create([
@@ -30,6 +31,7 @@ class DogSeeder extends Seeder
             'weight' => 2.5,
             'color' => 'Black',
             'owner' => 'Jane Doe',
+            'additional_info' => 'Loves to fetch and swim.',
         ]);
 
         Dog::create([
@@ -39,6 +41,7 @@ class DogSeeder extends Seeder
             'weight' => 3.5,
             'color' => 'Brown',
             'owner' => 'John Smith',
+            'additional_info' => 'Protective and loyal, great with kids.',
         ]);
     }
 }

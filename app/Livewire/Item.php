@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Livewire;
 
 use App\Helpers\Cart;
@@ -15,7 +14,7 @@ class Item extends Component
 
     public function mount()
     {
-        $this->items = ItemModel::all(); // Fetch all items from the database
+        $this->items = ItemModel::orderBy('name')->get(); // Fetch all items, ordered by name
         $this->updateBasketView();
     }
 
@@ -27,6 +26,15 @@ class Item extends Component
 
     public function addToBasket(ItemModel $item)
     {
+        // Check stock before adding
+        if ($item->stock <= 0) {
+            $this->dispatch('swal:toast', [
+                'background' => 'error',
+                'html' => "Sorry, <b><i>{$item->name}</i></b> is currently out of stock!",
+            ]);
+            return;
+        }
+
         // Add item to the cart
         Cart::add($item);
 
@@ -36,13 +44,13 @@ class Item extends Component
         // Dispatch success message with the correct attributes
         $this->dispatch('swal:toast', [
             'background' => 'success',
-            'html' => "The item <b><i>{$item->item}</i></b> has been added to your shopping basket", // Use $item->item here
+            'html' => "<b><i>{$item->name}</i></b> has been added to your shopping basket! 🐕",
         ]);
     }
 
-    #[Layout('layouts.project', ['title' => 'Item', 'description' => 'Dog kennel Item'])]
+    #[Layout('layouts.project', ['title' => 'Shop - The Dog Kennel', 'subtitle' => 'Shop', 'description' => 'Premium dog supplies and accessories for your beloved companion'])]
     public function render()
     {
-        return view('livewire.shop'); // Render your shop view with the available items
+        return view('livewire.shop');
     }
 }
