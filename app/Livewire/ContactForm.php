@@ -2,10 +2,10 @@
 
 namespace App\Livewire;
 
-use Illuminate\Mail\Mailables\Address;
 use Livewire\Component;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactMail;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
 class ContactForm extends Component
@@ -16,7 +16,7 @@ class ContactForm extends Component
 
     protected $rules = [
         'name' => 'required|string|min:2|max:100',
-        'email' => 'required|email:rfc,dns|max:255',
+        'email' => 'required|email|max:255',
         'message' => 'required|string|min:10|max:1000',
     ];
 
@@ -48,13 +48,19 @@ class ContactForm extends Component
             // Create the email
             $contactMail = new ContactMail($cleanName, $this->email, $cleanMessage);
 
-            // Send to your business email
-            $recipient = new Address('info@example.com', 'The Dog Kennel');
-            Mail::to($recipient)->send($contactMail);
+            // Get all admins (exact same pattern as your checkout)
+            $admins = User::where('admin', true)->select('name', 'email')->get();
 
-            // Optional: Send a confirmation email to the user
-            // You could create an additional mail class for this
-            // Mail::to($this->email)->send(new ContactConfirmationMail($cleanName));
+            // Check if we have any admins
+            if ($admins->isEmpty()) {
+                // Fallback to a default email if no admins exist
+                Mail::to('test1@example.com')->send($contactMail);
+            } else {
+                // Send to admins (exactly like your checkout pattern)
+                Mail::to($admins->first())
+                    ->cc($admins->skip(1))
+                    ->send($contactMail);
+            }
 
             // Log the contact for record keeping
             Log::info('Contact form submitted', [

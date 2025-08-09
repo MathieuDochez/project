@@ -14,7 +14,6 @@ class OrderConfirmation extends Mailable
     use Queueable, SerializesModels;
     public $data;
 
-
     /**
      * Create a new message instance.
      */
@@ -23,14 +22,13 @@ class OrderConfirmation extends Mailable
         $this->data = $data;
     }
 
-
     /**
      * Get the message envelope.
      */
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Order Confirmation',
+            subject: 'Order Confirmation - The Dog Kennel',
         );
     }
 
@@ -40,7 +38,7 @@ class OrderConfirmation extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.order-confirmation',
+            view: 'emails.order-confirmation',
         );
     }
 
