@@ -4,13 +4,16 @@ namespace App\Livewire;
 
 use App\Helpers\Cart;
 use App\Livewire\Forms\ShippingForm;
+use App\Mail\AdminOrderNotification;
 use App\Models\Item as ItemModel;
 use App\Models\Order;
 use App\Models\Orderline;
+use App\Models\User;
 use App\Traits\SweetAlertTrait;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Illuminate\Support\Facades\Mail;
 
 class Basket extends Component
 {
@@ -29,57 +32,89 @@ class Basket extends Component
 
     public function checkout()
     {
-        try {
-            // validate the form
-            $this->form->validate();
+        // validate the form
+        $this->form->validate();
+        // hide the modal
+        $this->showModal = false;
+        // check if there are records in backorder
+        $this->updateBackorder();
 
-            // hide the modal
-            $this->showModal = false;
+        // Store cart items and shipping details before clearing
+        $cartItems = Cart::getItems();
+        $shippingDetails = [
+            'address' => $this->form->address,
+            'city' => $this->form->city,
+            'zip' => $this->form->zip,
+            'country' => $this->form->country,
+            'notes' => $this->form->notes,
+        ];
 
-            // check if there are records in backorder
-            $this->updateBackorder();
+        // Create the order
+        $order = Order::create([
+            'user_id' => auth()->user()->id,
+            'total_price' => Cart::getTotalPrice(),
+        ]);
 
-            // Create order
-            $order = Order::create([
-                'user_id' => auth()->user()->id,
-                'total_price' => Cart::getTotalPrice(),
+        // loop over the records in the basket and add them to the orderlines table
+        foreach ($cartItems as $item) {
+            Orderline::create([
+                'order_id' => $order->id,
+                'name' => $item['name'],
+                'description' => $item['description'],
+                'price' => $item['price'],
+                'total_price' => $item['price'],
+                'quantity' => $item['qty'],
             ]);
+            // update the stock
+            $updateQty = ItemModel::findOrFail($item['id']);
+            $updateQty->stock > $item['qty'] ? $updateQty->stock -= $item['qty'] : $updateQty->stock = 0;
+            $updateQty->save();
+        }
 
-            // Create orderlines and update stock
-            foreach (Cart::getItems() as $item) {
-                Orderline::create([
-                    'order_id' => $order->id,
-                    'name' => $item['name'],
-                    'description' => $item['description'],
-                    'price' => $item['price'],
-                    'total_price' => $item['price'],  // BACK TO ORIGINAL
-                    'quantity' => $item['qty'],
-                ]);
+        // Send customer confirmation email
+        $this->form->sendEmail($this->backorder);
 
-                // Update stock
-                $updateQty = ItemModel::findOrFail($item['id']);
-                $updateQty->stock > $item['qty'] ? $updateQty->stock -= $item['qty'] : $updateQty->stock = 0;
-                $updateQty->save();
+        // Send admin notification email
+        $this->sendAdminNotification($order, $cartItems, $shippingDetails, $this->backorder);
+
+        // reset the form, backorder array and error bag
+        $this->form->reset();
+        $this->reset('backorder');
+        $this->resetErrorBag();
+        // empty the cart
+        Cart::empty();
+        $this->dispatch('basket-updated');
+        // show a confirmation message
+        $this->swalToast("Thank you for your order.<br>The records will be shipped as soon as possible.");
+    }
+
+    /**
+     * Send admin notification email for new orders
+     */
+    private function sendAdminNotification(Order $order, array $cartItems, array $shippingDetails, array $backorderItems)
+    {
+        try {
+            // Get all admin users
+            $admins = User::where('admin', true)->get();
+
+            if ($admins->count() > 0) {
+                // Create the admin notification email
+                $adminMail = new AdminOrderNotification($order, $cartItems, $shippingDetails, $backorderItems);
+
+                // Send to all admins
+                foreach ($admins as $admin) {
+                    Mail::to($admin->email)->send($adminMail);
+                }
+
+                // Log successful admin notification
+                \Log::info("Admin notification sent for order #{$order->id} to {$admins->count()} admin(s)");
+            } else {
+                // Log if no admins found
+                \Log::warning("No admin users found to notify for order #{$order->id}");
             }
-
-            // Send confirmation email - REQUIRED (no silent failures)
-            $this->form->sendEmail($this->backorder);
-
-            // Reset everything
-            $this->form->reset();
-            $this->reset('backorder');
-            $this->resetErrorBag();
-
-            // Empty cart and update basket
-            Cart::empty();
-            $this->dispatch('basket-updated');
-
-            // Show success message
-            $this->swalToast("Thank you for your order.<br>The records will be shipped as soon as possible.");
-
         } catch (\Exception $e) {
-            // User-friendly error message - includes email failures
-            $this->swalToast("Something went wrong. Please try again.", 'error');
+            // Log email sending errors but don't interrupt the order process
+            \Log::error("Failed to send admin notification for order #{$order->id}: " . $e->getMessage());
         }
     }
 

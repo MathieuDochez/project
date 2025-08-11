@@ -1,109 +1,44 @@
 <div>
-    <!-- Shop Header -->
-    <div class="bg-gradient-to-r from-green-600 to-green-700 rounded-2xl p-8 mb-8 text-white shadow-xl">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <x-dk.logo class="w-16 h-16"/>
-                <div>
-                    <h1 class="text-4xl font-bold mb-2">The Dog Kennel Shop</h1>
-                    <p class="text-green-100 text-lg">Premium supplies for your beloved companion</p>
-                </div>
-            </div>
-            <div class="text-right">
-                <p class="text-green-100 text-sm">{{ count($items) }} {{ Str::plural('product', count($items)) }} available</p>
-                <p class="text-2xl font-bold">Quality Guaranteed</p>
-            </div>
-        </div>
-    </div>
+    <!-- Filter Bar Component -->
+    @livewire('components.filter-bar', ['config' => $filterConfig])
 
-    <!-- Shop Stats & Features -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white rounded-xl p-6 shadow-lg border border-green-100">
-            <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                    <x-heroicon-o-truck class="w-6 h-6 text-green-600"/>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gray-800">Free Shipping</h3>
-                    <p class="text-gray-600 text-sm">On orders over €50</p>
-                </div>
-            </div>
+    <!-- Items Grid -->
+    @if($items->count() > 0)
+        <div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-8">
+            @foreach($items as $item)
+                <x-dk.item-card :item="$item"/>
+            @endforeach
         </div>
 
-        <div class="bg-white rounded-xl p-6 shadow-lg border border-green-100">
-            <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                    <x-heroicon-o-shield-check class="w-6 h-6 text-green-600"/>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gray-800">Quality Promise</h3>
-                    <p class="text-gray-600 text-sm">30-day guarantee</p>
-                </div>
-            </div>
+        <!-- Pagination -->
+        <div class="mt-8">
+            {{ $items->links() }}
         </div>
-
-        <div class="bg-white rounded-xl p-6 shadow-lg border border-green-100">
-            <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                    <x-heroicon-o-heart class="w-6 h-6 text-green-600"/>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gray-800">Dog Approved</h3>
-                    <p class="text-gray-600 text-sm">Tested & loved</p>
-                </div>
-            </div>
+    @else
+        <!-- No Results Found -->
+        <div class="text-center py-12 bg-white rounded-lg shadow-md">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47-.881-6.08-2.33l-.147-.15a6 6 0 018.13-8.13L14.46 5M15 13h.01"></path>
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">No items found</h3>
+            <p class="mt-1 text-sm text-gray-500">
+                @if($search || $categoryFilter || $minPrice || $maxPrice)
+                    Try adjusting your search criteria or filters.
+                @else
+                    No items are currently available.
+                @endif
+            </p>
         </div>
-    </div>
+    @endif
 
-    <!-- Products Section -->
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-        <!-- Products Header -->
-        <div class="bg-gray-50 px-8 py-6 border-b border-gray-200">
-            <div class="flex items-center justify-between">
-                <h2 class="text-2xl font-bold text-gray-800">Our Products</h2>
-                <div class="flex items-center space-x-4">
-                    <!-- Future: Add search and filters here -->
-                    <div class="text-sm text-gray-600">
-                        Showing {{ count($items) }} products
-                    </div>
-                </div>
-            </div>
+    <!-- Loading Indicator -->
+    <div wire:loading.flex class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 items-center justify-center">
+        <div class="bg-white rounded-lg p-6 flex items-center space-x-3">
+            <svg class="animate-spin h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span class="text-gray-700">Loading...</span>
         </div>
-
-        <!-- Products Grid -->
-        <div class="p-8">
-            @if(count($items) > 0)
-                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-                    @foreach($items as $item)
-                        @if($item !== null)
-                            <x-dk.item-card :item="$item"/>
-                        @endif
-                    @endforeach
-                </div>
-            @else
-                <!-- Empty State -->
-                <div class="text-center py-16">
-                    <div class="max-w-md mx-auto">
-                        <x-dk.logo class="w-20 h-20 mx-auto mb-4 text-gray-400"/>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">No Products Available</h3>
-                        <p class="text-gray-600 mb-6">Check back later for new products!</p>
-                    </div>
-                </div>
-            @endif
-        </div>
-    </div>
-
-    <!-- Bottom CTA Section -->
-    <div class="mt-12 bg-green-50 rounded-2xl p-8 text-center border border-green-200">
-        <h3 class="text-2xl font-bold text-green-800 mb-4">Need Help Choosing?</h3>
-        <p class="text-green-700 mb-6 max-w-2xl mx-auto">
-            Our expert team is here to help you find the perfect products for your dog's needs.
-            Contact us for personalized recommendations!
-        </p>
-        <a href="{{ route('contact') }}"
-           class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition duration-200 shadow-lg hover:shadow-xl">
-            <x-heroicon-o-chat-bubble-left-right class="w-5 h-5 mr-2"/>
-            Contact Our Experts
-        </a>
     </div>
 </div>

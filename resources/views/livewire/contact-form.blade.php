@@ -3,13 +3,13 @@
         <!-- Name Field -->
         <div>
             <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">
-                <span class="text-orange-600">👤</span> Your Name *
+                <span class="text-[#617457]">👤</span> Your Name *
             </label>
             <input
                 type="text"
                 id="name"
                 wire:model="name"
-                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200 @error('name') border-red-500 @enderror"
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#617457] focus:border-[#617457] transition-colors duration-200 @error('name') border-red-500 @enderror"
                 placeholder="Enter your full name"
             >
             @error('name')
@@ -25,13 +25,13 @@
         <!-- Email Field -->
         <div>
             <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
-                <span class="text-orange-600">📧</span> Email Address *
+                <span class="text-[#617457]">📧</span> Email Address *
             </label>
             <input
                 type="email"
                 id="email"
                 wire:model="email"
-                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200 @error('email') border-red-500 @enderror"
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#617457] focus:border-[#617457] transition-colors duration-200 @error('email') border-red-500 @enderror"
                 placeholder="Enter your email address"
             >
             @error('email')
@@ -47,13 +47,13 @@
         <!-- Message Field -->
         <div>
             <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">
-                <span class="text-orange-600">💬</span> Your Message *
+                <span class="text-[#617457]">💬</span> Your Message *
             </label>
             <textarea
                 id="message"
                 wire:model="message"
                 rows="5"
-                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors duration-200 resize-none @error('message') border-red-500 @enderror"
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#617457] focus:border-[#617457] transition-colors duration-200 resize-none @error('message') border-red-500 @enderror"
                 placeholder="Tell us how we can help you and your furry friend..."
             ></textarea>
             @error('message')
@@ -70,7 +70,7 @@
         <div class="pt-4">
             <button
                 type="submit"
-                class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center space-x-2"
+                class="w-full bg-gradient-to-r from-[#617457] to-[#4a5a41] hover:from-[#4a5a41] hover:to-[#3d4635] text-white font-semibold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center space-x-2"
                 wire:loading.attr="disabled"
                 wire:loading.class="opacity-75 cursor-not-allowed"
             >
@@ -85,7 +85,7 @@
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                 </span>
-                <span wire:loading.remove>Send Message</span>
+                <span wire:loading.remove">Send Message</span>
                 <span wire:loading>Sending...</span>
             </button>
         </div>
@@ -96,7 +96,7 @@
         </p>
     </form>
 
-    <!-- Success Message with Enhanced Styling -->
+    <!-- Success Message -->
     @if(session()->has('success'))
         <div
             x-data="{ show: true }"
@@ -124,7 +124,7 @@
         </div>
     @endif
 
-    <!-- Email Validation Error (if exists) -->
+    <!-- Error Message -->
     @if(session()->has('error'))
         <div
             x-data="{ show: true }"

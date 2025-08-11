@@ -22,7 +22,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         .header {
-            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            background: linear-gradient(135deg, #617457 0%, #4a5a41 100%);
             color: white;
             padding: 30px;
             text-align: center;
@@ -44,12 +44,12 @@
             margin-bottom: 25px;
             padding: 20px;
             background: #f8fafc;
-            border-left: 4px solid #f97316;
+            border-left: 4px solid #617457;
             border-radius: 8px;
         }
         .field-label {
             font-weight: bold;
-            color: #f97316;
+            color: #617457;
             font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -79,8 +79,8 @@
             margin: 5px 0;
         }
         .timestamp {
-            background: #fef3c7;
-            border: 1px solid #f59e0b;
+            background: #f0f9ff;
+            border: 1px solid #617457;
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 25px;
@@ -108,20 +108,20 @@
 
         <div class="field">
             <div class="field-label">👤 Customer Name</div>
-            <div class="field-value">{{ $name }}</div>
+            <div class="field-value">{{ $data['name'] }}</div>
         </div>
 
         <div class="field">
             <div class="field-label">📧 Email Address</div>
             <div class="field-value">
-                <a href="mailto:{{ $email }}" style="color: #f97316; text-decoration: none;">{{ $email }}</a>
+                <a href="mailto:{{ $data['email'] }}" style="color: #617457; text-decoration: none;">{{ $data['email'] }}</a>
             </div>
         </div>
 
         <div class="field">
             <div class="field-label">💬 Message</div>
             <div class="field-value">
-                <div class="message-content">{{ $message }}</div>
+                <div class="message-content">{{ $data['message'] }}</div>
             </div>
         </div>
 
