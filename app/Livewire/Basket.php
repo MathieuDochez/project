@@ -132,7 +132,32 @@ class Basket extends Component
 
     public function increaseQty(ItemModel $item)
     {
-        Cart::add($item);
+        // Refresh item to get current stock from database
+        $item = $item->fresh();
+
+        // Check stock before increasing
+        $currentQtyInCart = Cart::getOneItem($item->id)['qty'] ?? 0;
+        $newTotalQty = $currentQtyInCart + 1;
+
+        if ($newTotalQty > $item->stock) {
+            $this->dispatch('swal:toast', [
+                'background' => 'error',
+                'html' => "Cannot add more <b><i>{$item->name}</i></b>. Only {$item->stock} available in stock.",
+            ]);
+            return;
+        }
+
+        // Try to add to cart (Cart::add will also validate)
+        $success = Cart::add($item);
+
+        if (!$success) {
+            $this->dispatch('swal:toast', [
+                'background' => 'error',
+                'html' => "Cannot add more <b><i>{$item->name}</i></b>. Stock limit reached.",
+            ]);
+            return;
+        }
+
         $this->dispatch('basket-updated');
     }
 

@@ -23,7 +23,7 @@ class Item extends Component
     public $sortBy = 'name';
     public $sortDirection = 'asc';
 
-    protected $listeners = ['filtersChanged' => 'updateFilters'];
+    protected $listeners = ['filtersChanged' => 'updateFilters', 'basket-updated' => 'updateBasketView'];
 
     protected $queryString = [
         'search' => ['except' => ''],
@@ -52,13 +52,35 @@ class Item extends Component
         $this->resetPage();
     }
 
-    protected function updateBasketView()
+    public function updateBasketView()
     {
         $this->basketItems = Cart::getItems();
     }
 
     public function addToBasket(ItemModel $item)
     {
+        // CHECK 1: Verify item is in stock
+        if ($item->stock <= 0) {
+            $this->dispatch('swal:toast', [
+                'background' => 'error',
+                'html' => "Sorry, <b><i>{$item->name}</i></b> is currently out of stock.",
+            ]);
+            return;
+        }
+
+        // CHECK 2: Check if adding one more would exceed available stock
+        $currentQtyInCart = Cart::getOneItem($item->id)['qty'] ?? 0;
+        $newTotalQty = $currentQtyInCart + 1;
+
+        if ($newTotalQty > $item->stock) {
+            $this->dispatch('swal:toast', [
+                'background' => 'error',
+                'html' => "Cannot add more <b><i>{$item->name}</i></b>. Only {$item->stock} available in stock (you already have {$currentQtyInCart} in your cart).",
+            ]);
+            return;
+        }
+
+        // If validation passes, add to cart
         Cart::add($item);
         $this->dispatch('basket-updated');
         $this->dispatch('swal:toast', [
@@ -77,7 +99,7 @@ class Item extends Component
                 });
             })
             ->when($this->categoryFilter, function ($query) {
-                $query->where('category', $this->categoryFilter);
+                $query->byCategory(ProductCategory::from($this->categoryFilter));
             })
             ->when($this->minPrice, function ($query) {
                 $query->where('price', '>=', $this->minPrice);
@@ -86,46 +108,39 @@ class Item extends Component
                 $query->where('price', '<=', $this->maxPrice);
             })
             ->orderBy($this->sortBy, $this->sortDirection)
-            ->paginate(9);
+            ->paginate(12);
     }
 
-    #[Layout('layouts.project', ['title' => 'Shop', 'description' => 'Dog kennel Items'])]
+    #[Layout('layouts.project', ['title' => 'Dog store', 'description' => 'Our store with dog products'])]
     public function render()
     {
-        $items = $this->items;
+        $this->updateBasketView();
 
-        // Get categories for filter
+        // Get items
+        $items = $this->getItemsProperty();
+
+        // Create filter configuration
         $categories = [];
         try {
-            if (class_exists('\App\Enums\ProductCategory')) {
-                $categories = collect(\App\Enums\ProductCategory::cases())->mapWithKeys(function ($case) {
+            if (class_exists('App\Enums\ProductCategory')) {
+                $categories = collect(ProductCategory::cases())->mapWithKeys(function ($case) {
                     $value = $case->value ?? $case->name;
                     $label = ucfirst(str_replace('_', ' ', $value));
                     return [$value => $label];
                 })->toArray();
-            } else {
-                // Fallback: get from database
-                $categoryItems = ItemModel::select('category')->distinct()->whereNotNull('category')->get();
-                foreach ($categoryItems as $item) {
-                    $category = $item->category;
-                    if (is_object($category)) {
-                        $value = $category->value ?? $category->name ?? (string)$category;
-                    } else {
-                        $value = $category;
-                    }
-                    $categories[$value] = ucfirst(str_replace('_', ' ', $value));
-                }
             }
         } catch (\Exception $e) {
             $categories = [
                 'food' => 'Food',
                 'toys' => 'Toys',
                 'accessories' => 'Accessories',
-                'training' => 'Training'
+                'beds' => 'Beds',
+                'grooming' => 'Grooming',
+                'clothing' => 'Clothing',
+                'housing' => 'Housing'
             ];
         }
 
-        // Create filter configuration
         $filterConfig = [
             'searchPlaceholder' => 'Search items by name or description...',
             'showSearch' => true,
@@ -153,7 +168,8 @@ class Item extends Component
 
         return view('livewire.shop', [
             'items' => $items,
-            'filterConfig' => $filterConfig
+            'filterConfig' => $filterConfig,
+            'basketItems' => $this->basketItems,
         ]);
     }
 }

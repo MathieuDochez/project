@@ -36,11 +36,21 @@
                     <div class="relative overflow-hidden h-64"
                          @mouseenter="isHovered = true"
                          @mouseleave="isHovered = false">
-                        <img src="{{ asset('storage/img/' . $dog->name . '.jpg') }}"
+                        <img src="{{ $dog->image_url }}"
                              alt="{{ $dog->name }}"
                              class="w-full h-full object-cover object-center transition-transform duration-500"
                              :class="isHovered ? 'scale-110' : 'scale-100'"
-                             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjI1NiIgdmlld0JveD0iMCAwIDMwMCAyNTYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjU2IiBmaWxsPSIjRkJGQ0ZEIi8+CjxwYXRoIGQ9Ik0xNTAgNjBDMTY2IDYwIDE4MCA3NCAxODAgOTBDMTgwIDEwNiAxNjYgMTIwIDE1MCAxMjBDMTU0IDExNCAxMzAgMTA2IDEzMCA5MEMxMzAgNzQgMTM0IDYwIDE1MCA2MFoiIGZpbGw9IiM2MTc0NTciLz4KICA8cGF0aCBkPSJNODAgMTYwQzgwIDE1MCA5MCAxNDAgMTA1IDE0MEgxOTVDMjEwIDE0MCAyMjAgMTUwIDIyMCAxNjBWMTkwSDgwVjE2MFoiIGZpbGw9IiM2MTc0NTciLz4KICA8dGV4dCB4PSIxNTAiIHk9IjIyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzk5QTNBRiIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0cHgiPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4K'">
+                             onerror="console.log('❌ Image failed to load:', '{{ $dog->image_url }}', 'for dog:', '{{ $dog->name }}', 'DB path:', '{{ $dog->image_path }}')">
+
+                        <!-- Debug Info (remove this after fixing) -->
+                        @if(config('app.debug'))
+                            <div class="absolute bottom-2 left-2 bg-black/75 text-white text-xs p-1 rounded"
+                                 title="DB: {{ $dog->image_path }} | URL: {{ $dog->image_url }}">
+                                DB: {{ $dog->image_path ? 'Set' : 'Null' }} |
+                                Has: {{ $dog->hasImage() ? 'Yes' : 'No' }} |
+                                <a href="{{ $dog->image_url }}" target="_blank" class="text-yellow-300">Test URL</a>
+                            </div>
+                        @endif
 
                         <!-- Hover Overlay -->
                         <div x-show="isHovered"
@@ -62,6 +72,13 @@
                         <div class="absolute top-3 right-3 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
                             {{ $dog->breed }}
                         </div>
+
+                        <!-- Image Status Badge -->
+                        @if(!$dog->hasImage())
+                            <div class="absolute top-3 left-3 bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-semibold shadow-lg">
+                                No Photo
+                            </div>
+                        @endif
                     </div>
 
                     <!-- Dog Information -->
@@ -104,25 +121,33 @@
                         <div x-show="showInfo"
                              x-transition:enter="transition ease-out duration-300"
                              x-transition:enter-start="opacity-0 max-h-0"
-                             x-transition:enter-end="opacity-100 max-h-40"
+                             x-transition:enter-end="opacity-100 max-h-96"
                              x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="opacity-100 max-h-40"
+                             x-transition:leave-start="opacity-100 max-h-96"
                              x-transition:leave-end="opacity-0 max-h-0"
                              class="border-t border-green-100 pt-4 overflow-hidden">
+                            <h3 class="text-sm font-semibold text-green-800 mb-2 flex items-center">
+                                <x-heroicon-o-information-circle class="w-4 h-4 mr-1"/>
+                                About {{ $dog->name }}
+                            </h3>
                             @if($dog->additional_info)
-                                <div class="bg-green-50 rounded-lg p-4 border-l-4 border-green-400">
-                                    <h4 class="text-sm font-semibold text-green-800 mb-2 flex items-center">
-                                        <x-heroicon-o-information-circle class="w-4 h-4 mr-1"/>
-                                        Additional Information
-                                    </h4>
-                                    <p class="text-sm text-green-700 leading-relaxed">{{ $dog->additional_info }}</p>
-                                </div>
+                                <p class="text-sm text-gray-600 leading-relaxed">
+                                    {{ $dog->additional_info }}
+                                </p>
                             @else
-                                <div class="bg-gray-50 rounded-lg p-4 text-center">
-                                    <x-heroicon-o-document-text class="w-8 h-8 mx-auto text-gray-400 mb-2"/>
-                                    <p class="text-sm text-gray-500">No additional information available</p>
-                                </div>
+                                <p class="text-sm text-gray-500 italic">
+                                    No additional information available.
+                                </p>
                             @endif
+                        </div>
+
+                        <!-- Contact Button -->
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <a href="{{ route('contact') }}"
+                               class="inline-flex items-center text-sm text-green-600 hover:text-green-700 font-medium transition duration-200">
+                                <x-heroicon-o-heart class="w-4 h-4 mr-1"/>
+                                Interested in {{ $dog->name }}?
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -130,20 +155,25 @@
         </div>
 
         <!-- Empty State -->
-        @if($dogs->isEmpty())
+        @if($dogs->count() === 0)
             <div class="text-center py-16">
-                <div class="max-w-md mx-auto bg-white rounded-2xl shadow-lg p-8">
-                    <x-dk.logo class="w-20 h-20 mx-auto mb-4 text-gray-400"/>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">No Dogs Currently</h3>
-                    <p class="text-gray-600 mb-6">Check back later to see our wonderful dogs!</p>
+                <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+                    <x-heroicon-o-face-frown class="w-12 h-12 text-gray-400"/>
                 </div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">No Dogs Yet</h3>
+                <p class="text-gray-600 mb-6">Check back soon to meet our wonderful companions!</p>
+                <a href="{{ route('shop') }}"
+                   class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition duration-200">
+                    <x-heroicon-o-shopping-bag class="w-5 h-5 mr-2"/>
+                    Shop for Dog Supplies
+                </a>
             </div>
         @endif
 
         <!-- Pagination -->
         @if($dogs->hasPages())
             <div class="mt-12 flex justify-center">
-                <div class="bg-white rounded-2xl shadow-lg p-4">
+                <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-4">
                     {{ $dogs->links() }}
                 </div>
             </div>

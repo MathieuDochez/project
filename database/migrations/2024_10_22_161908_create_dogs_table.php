@@ -20,7 +20,8 @@ return new class extends Migration
             $table->float('weight');
             $table->string('color');
             $table->string('owner');
-            $table->text('additional_info')->nullable(); // Add this line
+            $table->text('additional_info')->nullable();
+            $table->string('image_path')->nullable();
             $table->timestamps();
         });
     }

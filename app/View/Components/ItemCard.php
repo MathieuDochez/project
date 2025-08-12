@@ -7,10 +7,12 @@ use Illuminate\View\Component;
 class ItemCard extends Component
 {
     public $item;
+    public $basketItems;
 
-    public function __construct($item)
+    public function __construct($item, $basketItems = [])
     {
         $this->item = $item;
+        $this->basketItems = $basketItems;
     }
 
     public function render()

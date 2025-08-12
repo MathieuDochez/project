@@ -19,10 +19,24 @@ class Cart
         self::$cart = session()->get('cart') ?? self::$cart;
     }
 
-    // Add an item to the cart
-    public static function add(Item $item): void
+    public static function add(Item $item): bool
     {
+        // Refresh item from database to get current stock
+        $item = $item->fresh();
+
+        // Check if item is in stock
+        if ($item->stock <= 0) {
+            return false;
+        }
+
         $singlePrice = $item->price;
+        $currentQtyInCart = self::getOneItem($item->id)['qty'] ?? 0;
+        $newTotalQty = $currentQtyInCart + 1;
+
+        // Check if adding one more would exceed available stock
+        if ($newTotalQty > $item->stock) {
+            return false;
+        }
 
         if (array_key_exists($item->id, self::$cart['items'])) {
             self::$cart['items'][$item->id]['qty']++;
@@ -30,14 +44,15 @@ class Cart
         } else {
             self::$cart['items'][$item->id] = [
                 'id' => $item->id,
-                'name' => $item->name, // Item name
-                'description' => $item->description, // Description
-                'price' => $singlePrice, // Single price
-                'qty' => 1, // Initial quantity
+                'name' => $item->name,
+                'description' => $item->description,
+                'price' => $singlePrice,
+                'qty' => 1,
             ];
         }
 
         self::updateTotal();
+        return true;
     }
 
 

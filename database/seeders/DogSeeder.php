@@ -13,7 +13,6 @@ class DogSeeder extends Seeder
      */
     public function run(): void
     {
-
         Dog::create([
             'name' => 'Buddy',
             'breed' => 'Golden Retriever',
@@ -22,6 +21,7 @@ class DogSeeder extends Seeder
             'color' => 'Golden',
             'owner' => 'John Doe',
             'additional_info' => 'Friendly and playful, up for adoption.',
+            'image_path' => 'img/Buddy.jpg', // Link to existing image
         ]);
 
         Dog::create([
@@ -32,6 +32,7 @@ class DogSeeder extends Seeder
             'color' => 'Black',
             'owner' => 'Jane Doe',
             'additional_info' => 'Loves to fetch and swim.',
+            'image_path' => 'img/Max.jpg', // Link to existing image
         ]);
 
         Dog::create([
@@ -42,6 +43,7 @@ class DogSeeder extends Seeder
             'color' => 'Brown',
             'owner' => 'John Smith',
             'additional_info' => 'Protective and loyal, great with kids.',
+            'image_path' => 'img/Bella.jpg', // Link to existing image
         ]);
     }
 }

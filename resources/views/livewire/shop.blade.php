@@ -6,7 +6,7 @@
     @if($items->count() > 0)
         <div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-8">
             @foreach($items as $item)
-                <x-dk.item-card :item="$item"/>
+                <x-dk.item-card :item="$item" :basketItems="$basketItems ?? []"/>
             @endforeach
         </div>
 
@@ -22,7 +22,7 @@
             </svg>
             <h3 class="mt-2 text-sm font-medium text-gray-900">No items found</h3>
             <p class="mt-1 text-sm text-gray-500">
-                @if($search || $categoryFilter || $minPrice || $maxPrice)
+                @if($filterConfig['search'] || $filterConfig['primaryFilter'] || $filterConfig['minValue'] || $filterConfig['maxValue'])
                     Try adjusting your search criteria or filters.
                 @else
                     No items are currently available.
