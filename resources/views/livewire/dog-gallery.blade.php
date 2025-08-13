@@ -39,18 +39,7 @@
                         <img src="{{ $dog->image_url }}"
                              alt="{{ $dog->name }}"
                              class="w-full h-full object-cover object-center transition-transform duration-500"
-                             :class="isHovered ? 'scale-110' : 'scale-100'"
-                             onerror="console.log('❌ Image failed to load:', '{{ $dog->image_url }}', 'for dog:', '{{ $dog->name }}', 'DB path:', '{{ $dog->image_path }}')">
-
-                        <!-- Debug Info (remove this after fixing) -->
-                        @if(config('app.debug'))
-                            <div class="absolute bottom-2 left-2 bg-black/75 text-white text-xs p-1 rounded"
-                                 title="DB: {{ $dog->image_path }} | URL: {{ $dog->image_url }}">
-                                DB: {{ $dog->image_path ? 'Set' : 'Null' }} |
-                                Has: {{ $dog->hasImage() ? 'Yes' : 'No' }} |
-                                <a href="{{ $dog->image_url }}" target="_blank" class="text-yellow-300">Test URL</a>
-                            </div>
-                        @endif
+                             :class="isHovered ? 'scale-110' : 'scale-100'">
 
                         <!-- Hover Overlay -->
                         <div x-show="isHovered"
@@ -85,98 +74,65 @@
                     <div class="p-6">
                         <!-- Basic Info -->
                         <div class="mb-4">
-                            <h2 class="text-xl font-bold text-gray-800 mb-2 flex items-center">
-                                {{ $dog->name }}
-                                @if($dog->age < 1)
-                                    <span class="ml-2 bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Puppy</span>
-                                @elseif($dog->age > 7)
-                                    <span class="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Senior</span>
-                                @endif
-                            </h2>
-
-                            <!-- Quick Stats -->
-                            <div class="grid grid-cols-2 gap-3 text-sm">
-                                <div class="flex items-center text-gray-600">
-                                    <x-heroicon-o-clock class="w-4 h-4 mr-2 text-green-600"/>
-                                    <span>{{ $dog->age }} {{ $dog->age == 1 ? 'year' : 'years' }}</span>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">{{ $dog->name }}</h3>
+                            <div class="grid grid-cols-2 gap-2 text-sm text-gray-600">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                    </svg>
+                                    {{ $dog->age }} years
                                 </div>
-                                <div class="flex items-center text-gray-600">
-                                    <x-heroicon-o-scale class="w-4 h-4 mr-2 text-green-600"/>
-                                    <span>{{ $dog->weight }} kg</span>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                    </svg>
+                                    {{ $dog->weight }} kg
                                 </div>
-                                <div class="flex items-center text-gray-600">
-                                    <x-heroicon-o-swatch class="w-4 h-4 mr-2 text-green-600"/>
-                                    <span>{{ $dog->color }}</span>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"/>
+                                    </svg>
+                                    {{ $dog->color }}
                                 </div>
-                                @if($dog->owner)
-                                    <div class="flex items-center text-gray-600">
-                                        <x-heroicon-o-user class="w-4 h-4 mr-2 text-green-600"/>
-                                        <span>{{ $dog->owner }}</span>
-                                    </div>
-                                @endif
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                    </svg>
+                                    {{ $dog->owner ?: 'Available' }}
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Additional Info Section -->
+                        <!-- Extended Info -->
                         <div x-show="showInfo"
                              x-transition:enter="transition ease-out duration-300"
-                             x-transition:enter-start="opacity-0 max-h-0"
-                             x-transition:enter-end="opacity-100 max-h-96"
+                             x-transition:enter-start="opacity-0 transform scale-95"
+                             x-transition:enter-end="opacity-100 transform scale-100"
                              x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="opacity-100 max-h-96"
-                             x-transition:leave-end="opacity-0 max-h-0"
-                             class="border-t border-green-100 pt-4 overflow-hidden">
-                            <h3 class="text-sm font-semibold text-green-800 mb-2 flex items-center">
-                                <x-heroicon-o-information-circle class="w-4 h-4 mr-1"/>
-                                About {{ $dog->name }}
-                            </h3>
+                             x-transition:leave-start="opacity-100 transform scale-100"
+                             x-transition:leave-end="opacity-0 transform scale-95"
+                             class="mt-4 pt-4 border-t border-gray-200">
                             @if($dog->additional_info)
-                                <p class="text-sm text-gray-600 leading-relaxed">
-                                    {{ $dog->additional_info }}
-                                </p>
-                            @else
-                                <p class="text-sm text-gray-500 italic">
-                                    No additional information available.
-                                </p>
+                                <p class="text-sm text-gray-600 mb-4">{{ $dog->additional_info }}</p>
                             @endif
                         </div>
 
-                        <!-- Contact Button -->
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <a href="{{ route('contact') }}"
-                               class="inline-flex items-center text-sm text-green-600 hover:text-green-700 font-medium transition duration-200">
-                                <x-heroicon-o-heart class="w-4 h-4 mr-1"/>
-                                Interested in {{ $dog->name }}?
-                            </a>
+                        <!-- Action Button -->
+                        <div class="mt-4">
+                            <button @click="showInfo = !showInfo"
+                                    class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 shadow-md hover:shadow-lg">
+                                <span x-show="!showInfo">💚 Interested in {{ $dog->name }}?</span>
+                                <span x-show="showInfo">Show Less Info</span>
+                            </button>
                         </div>
                     </div>
                 </div>
             @endforeach
         </div>
 
-        <!-- Empty State -->
-        @if($dogs->count() === 0)
-            <div class="text-center py-16">
-                <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
-                    <x-heroicon-o-face-frown class="w-12 h-12 text-gray-400"/>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-800 mb-2">No Dogs Yet</h3>
-                <p class="text-gray-600 mb-6">Check back soon to meet our wonderful companions!</p>
-                <a href="{{ route('shop') }}"
-                   class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition duration-200">
-                    <x-heroicon-o-shopping-bag class="w-5 h-5 mr-2"/>
-                    Shop for Dog Supplies
-                </a>
-            </div>
-        @endif
-
         <!-- Pagination -->
-        @if($dogs->hasPages())
-            <div class="mt-12 flex justify-center">
-                <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-4">
-                    {{ $dogs->links() }}
-                </div>
-            </div>
-        @endif
+        <div class="mt-12">
+            {{ $dogs->links() }}
+        </div>
     </div>
 </div>

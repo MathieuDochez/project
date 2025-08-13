@@ -34,7 +34,7 @@
                         <div class="flex-shrink-0 mr-6">
                             <div class="w-20 h-20 bg-gray-100 rounded-xl overflow-hidden shadow-md">
                                 <img class="w-full h-full object-cover"
-                                     src="{{ asset('storage/img/' . $item['name'] . '.jpg') }}"
+                                     src="{{ $currentItem ? $currentItem->image_url : asset('storage/img/' . $item['name'] . '.jpg') }}"
                                      alt="{{ $item['name'] }}"
                                      onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik00MCAyMEM0NiAyMCA1MCAyNCA1MCAzMEM1MCAzNiA0NiA0MCA0MCA0MEM0NCAzOCAzMCAzNiAzMCAzMEMzMCAyNCAzNCAyMCA0MCAyMFoiIGZpbGw9IiM5Q0EzQUYiLz4KICA8cGF0aCBkPSJNMjAgNTBDMjAgNDUgMjQgNDIgMzAgNDJINTBDNTYgNDIgNjAgNDUgNjAgNTBWNjBIMjBWNTBaIiBmaWxsPSIjOUNBM0FGIi8+Cjwvc3ZnPgo='">
                             </div>
@@ -64,45 +64,55 @@
                         </div>
 
                         {{-- Quantity Controls --}}
-                        <div class="flex-shrink-0 ml-6">
-                            <div class="flex items-center space-x-3">
-                                <div class="bg-white border-2 border-gray-200 rounded-lg overflow-hidden shadow-sm">
-                                    <div class="flex items-center">
-                                        <button wire:click="decreaseQty({{ $item['id'] }})"
-                                                class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-red-600 hover:bg-red-50 transition duration-200">
-                                            <x-heroicon-o-minus class="w-4 h-4"/>
-                                        </button>
-                                        <div class="w-12 h-10 flex items-center justify-center font-semibold text-gray-900 bg-gray-50 border-x-2 border-gray-200">
-                                            {{ $item['qty'] }}
-                                        </div>
-                                        <button wire:click="increaseQty({{ $item['id'] }})"
-                                                @if(!$canIncrease) disabled @endif
-                                                class="w-10 h-10 flex items-center justify-center transition duration-200
-                                                       @if($canIncrease) text-gray-600 hover:text-green-600 hover:bg-green-50 @else text-gray-400 cursor-not-allowed opacity-50 @endif">
-                                            <x-heroicon-o-plus class="w-4 h-4"/>
-                                        </button>
+                        <div class="flex items-center space-x-3 mx-6">
+                            <button wire:click="decreaseQty({{ $item['id'] }})"
+                                    class="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition duration-200">
+                                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+                                </svg>
+                            </button>
+
+                            <div class="w-16 text-center">
+                                <span class="text-lg font-semibold text-gray-900">{{ $item['qty'] }}</span>
+                                <p class="text-xs text-gray-500">Qty</p>
+                            </div>
+
+                            <button wire:click="increaseQty({{ $item['id'] }})"
+                                    @if(!$canIncrease) disabled @endif
+                                    class="w-8 h-8 rounded-full {{ $canIncrease ? 'bg-green-200 hover:bg-green-300' : 'bg-gray-100 cursor-not-allowed' }} flex items-center justify-center transition duration-200">
+                                <svg class="w-4 h-4 {{ $canIncrease ? 'text-green-600' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        {{-- Remove & Total --}}
+                        <div class="flex items-center space-x-4">
+                            <button wire:click="removeFromCart({{ $item['id'] }})"
+                                    class="text-red-500 hover:text-red-700 transition duration-200"
+                                    title="Remove from cart">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+
+                            <div class="text-right min-w-0">
+                                {{-- Stock Status --}}
+                                @if($currentItem)
+                                    <div class="text-xs mb-1">
+                                        @if($isAtMaxStock)
+                                            <span class="text-red-500 font-medium">Max in cart</span>
+                                        @elseif($remainingStock <= 3 && $remainingStock > 0)
+                                            <span class="text-yellow-600 font-medium">{{ $remainingStock }} more available</span>
+                                        @elseif($remainingStock > 0)
+                                            <span class="text-gray-500">{{ $remainingStock }} more available</span>
+                                        @endif
                                     </div>
-                                </div>
+                                @endif
 
-                                {{-- Stock Info & Subtotal --}}
-                                <div class="text-right">
-                                    {{-- Stock Status --}}
-                                    @if($currentItem)
-                                        <div class="text-xs mb-1">
-                                            @if($isAtMaxStock)
-                                                <span class="text-red-500 font-medium">Max in cart</span>
-                                            @elseif($remainingStock <= 3 && $remainingStock > 0)
-                                                <span class="text-yellow-600 font-medium">{{ $remainingStock }} more available</span>
-                                            @elseif($remainingStock > 0)
-                                                <span class="text-gray-500">{{ $remainingStock }} more available</span>
-                                            @endif
-                                        </div>
-                                    @endif
-
-                                    {{-- Subtotal --}}
-                                    <p class="text-sm text-gray-500">Subtotal</p>
-                                    <p class="text-lg font-bold text-gray-900">€{{ number_format($item['price'], 2) }}</p>
-                                </div>
+                                {{-- Subtotal --}}
+                                <p class="text-sm text-gray-500">Subtotal</p>
+                                <p class="text-lg font-bold text-gray-900">€{{ number_format($item['price'], 2) }}</p>
                             </div>
                         </div>
                     </div>
@@ -200,88 +210,66 @@
                 </div>
                 <div>
                     <h3 class="text-xl font-semibold text-gray-900">Checkout</h3>
-                    <p class="text-sm text-gray-500">Complete your order details</p>
+                    <p class="text-sm text-gray-500">Please provide your shipping information</p>
                 </div>
             </div>
         </x-slot>
 
         <x-slot name="content">
             <div class="space-y-6">
-                {{-- Order Summary --}}
-                <div class="bg-gray-50 rounded-lg p-4">
-                    <h4 class="font-semibold text-gray-900 mb-3">Order Summary</h4>
-                    <div class="space-y-2">
-                        @foreach($items as $item)
-                            <div class="flex justify-between text-sm">
-                                <span>{{ $item['name'] }} × {{ $item['qty'] }}</span>
-                                <span>€{{ number_format($item['price'], 2) }}</span>
-                            </div>
-                        @endforeach
-                        <div class="border-t pt-2 flex justify-between font-semibold">
-                            <span>Total</span>
-                            <span>€{{ number_format($totalPrice, 2) }}</span>
-                        </div>
+                <div>
+                    <x-label for="address" value="Address" />
+                    <x-input id="address" type="text" wire:model="form.address" class="mt-1 block w-full" />
+                    <x-input-error for="form.address" class="mt-2" />
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <x-label for="city" value="City" />
+                        <x-input id="city" type="text" wire:model="form.city" class="mt-1 block w-full" />
+                        <x-input-error for="form.city" class="mt-2" />
+                    </div>
+                    <div>
+                        <x-label for="zip" value="ZIP Code" />
+                        <x-input id="zip" type="text" wire:model="form.zip" class="mt-1 block w-full" />
+                        <x-input-error for="form.zip" class="mt-2" />
                     </div>
                 </div>
 
-                {{-- Shipping Information Form --}}
-                <div class="space-y-4">
-                    <h4 class="font-semibold text-gray-900">Shipping Information</h4>
-
-                    <div>
-                        <x-label for="address" value="Address" />
-                        <x-input id="address" type="text" wire:model="form.address" class="mt-1 block w-full" />
-                        <x-input-error for="form.address" class="mt-2" />
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <x-label for="city" value="City" />
-                            <x-input id="city" type="text" wire:model="form.city" class="mt-1 block w-full" />
-                            <x-input-error for="form.city" class="mt-2" />
-                        </div>
-                        <div>
-                            <x-label for="zip" value="ZIP Code" />
-                            <x-input id="zip" type="text" wire:model="form.zip" class="mt-1 block w-full" />
-                            <x-input-error for="form.zip" class="mt-2" />
-                        </div>
-                    </div>
-
-                    <div>
-                        <x-label for="country" value="Country" />
-                        <x-input id="country" type="text" wire:model="form.country" class="mt-1 block w-full" />
-                        <x-input-error for="form.country" class="mt-2" />
-                    </div>
-
-                    <div>
-                        <x-label for="notes" value="Order Notes (Optional)" />
-                        <textarea id="notes" wire:model="form.notes" rows="3"
-                                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                  placeholder="Any special delivery instructions..."></textarea>
-                        <x-input-error for="form.notes" class="mt-2" />
-                    </div>
+                <div>
+                    <x-label for="country" value="Country" />
+                    <x-input id="country" type="text" wire:model="form.country" class="mt-1 block w-full" />
+                    <x-input-error for="form.country" class="mt-2" />
                 </div>
 
-                {{-- Stock Warnings in Modal --}}
-                @if(count($backorder) > 0)
-                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                        <div class="flex items-start">
-                            <x-heroicon-o-exclamation-triangle class="w-5 h-5 text-yellow-400 mt-0.5 mr-3"/>
-                            <div>
-                                <h4 class="text-sm font-medium text-yellow-800">Backorder Notice</h4>
-                                <div class="mt-2 text-sm text-yellow-700">
-                                    <p class="mb-2">The following items will be backordered:</p>
-                                    <ul class="list-disc list-inside space-y-1">
-                                        @foreach($backorder as $backorderItem)
-                                            <li>{{ $backorderItem }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
+                <div>
+                    <x-label for="notes" value="Order Notes (Optional)" />
+                    <textarea id="notes" wire:model="form.notes" rows="3"
+                              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                              placeholder="Any special delivery instructions..."></textarea>
+                    <x-input-error for="form.notes" class="mt-2" />
+                </div>
             </div>
+
+            {{-- Stock Warnings in Modal --}}
+            @if(count($backorder) > 0)
+                <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div class="flex items-start">
+                        <x-heroicon-o-exclamation-triangle class="w-5 h-5 text-yellow-400 mt-0.5 mr-3"/>
+                        <div>
+                            <h4 class="text-sm font-medium text-yellow-800">Backorder Notice</h4>
+                            <div class="mt-2 text-sm text-yellow-700">
+                                <p class="mb-2">The following items will be backordered:</p>
+                                <ul class="list-disc list-inside space-y-1">
+                                    @foreach($backorder as $backorderItem)
+                                        <li>{{ $backorderItem }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </x-slot>
 
         <x-slot name="footer">

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('price', 8, 2);
             $table->string('category');
             $table->integer('stock')->default(0);
+            $table->string('image_path')->nullable(); // Added image_path column
             $table->timestamps();
         });
     }
@@ -27,7 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shops');
         Schema::dropIfExists('items');
     }
 };

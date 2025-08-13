@@ -17,6 +17,7 @@ class Item extends Model
         'price',
         'category',
         'stock',
+        'image_path', // Add image_path to fillable
     ];
 
     protected $casts = [
@@ -44,6 +45,30 @@ class Item extends Model
     public function scopeByCategory($query, ProductCategory $category)
     {
         return $query->where('category', $category);
+    }
+
+    // Image handling (same logic as Dog model)
+    public function getImageUrlAttribute()
+    {
+        if ($this->image_path) {
+            return asset('storage/' . $this->image_path);
+        }
+
+        // Fallback to legacy naming system (for existing images)
+        $legacyPath = 'img/' . $this->name . '.jpg';
+        return asset('storage/' . $legacyPath);
+    }
+
+    // Check if item has an image
+    public function hasImage()
+    {
+        if ($this->image_path) {
+            return true;
+        }
+
+        // Check legacy naming system
+        $legacyPath = 'img/' . $this->name . '.jpg';
+        return file_exists(public_path('storage/' . $legacyPath));
     }
 
     // Accessors
