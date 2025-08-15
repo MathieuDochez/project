@@ -17,7 +17,7 @@ class Item extends Model
         'price',
         'category',
         'stock',
-        'image_path', // Add image_path to fillable
+        'image_path',
     ];
 
     protected $casts = [
@@ -47,7 +47,7 @@ class Item extends Model
         return $query->where('category', $category);
     }
 
-    // Image handling (same logic as Dog model)
+    // Image handling
     public function getImageUrlAttribute()
     {
         if ($this->image_path) {

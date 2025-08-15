@@ -57,7 +57,6 @@
 
     <!-- Product Info -->
     <div class="p-6">
-        <!-- Basic Info -->
         <div class="mb-4">
             <h3 class="text-xl font-bold text-gray-800 mb-2 line-clamp-1">{{ $item->name }}</h3>
             <p class="text-gray-600 text-sm line-clamp-2">{{ $item->description }}</p>

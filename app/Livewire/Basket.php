@@ -124,14 +124,17 @@ class Basket extends Component
         $this->dispatch('basket-updated');
     }
 
-    public function decreaseQty(ItemModel $item)
+    public function decreaseQty($itemId)
     {
+        $item = ItemModel::findOrFail($itemId);
         Cart::delete($item);
         $this->dispatch('basket-updated');
     }
 
-    public function increaseQty(ItemModel $item)
+    public function increaseQty($itemId)
     {
+        $item = ItemModel::findOrFail($itemId);
+
         // Refresh item to get current stock from database
         $item = $item->fresh();
 
@@ -159,6 +162,16 @@ class Basket extends Component
         }
 
         $this->dispatch('basket-updated');
+    }
+
+    public function removeFromCart($itemId)
+    {
+        Cart::removeItem($itemId);
+        $this->dispatch('basket-updated');
+        $this->dispatch('swal:toast', [
+            'background' => 'success',
+            'html' => "Item removed from basket.",
+        ]);
     }
 
     public function updateBackorder()

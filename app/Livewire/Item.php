@@ -57,7 +57,8 @@ class Item extends Component
         $this->basketItems = Cart::getItems();
     }
 
-    public function addToBasket(ItemModel $item)
+    // RENAMED: Changed from addToBasket to addToCart (no forwarding needed!)
+    public function addToCart(ItemModel $item)
     {
         // CHECK 1: Verify item is in stock
         if ($item->stock <= 0) {
@@ -116,7 +117,6 @@ class Item extends Component
     {
         $this->updateBasketView();
 
-        // Get items
         $items = $this->getItemsProperty();
 
         // Create filter configuration
