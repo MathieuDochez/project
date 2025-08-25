@@ -16,8 +16,8 @@ class ItemCrud extends Component
     use WithFileUploads, WithPagination;
 
     public $itemId, $name, $description, $price, $category, $stock;
-    public $image; // For file upload
-    public $currentImagePath; // To display current image when editing
+    public $image;
+    public $currentImagePath;
     public $isEditing = false;
 
     protected $rules = [
@@ -29,12 +29,10 @@ class ItemCrud extends Component
         'image' => 'nullable|image|max:5024', // Max 5MB
     ];
 
-    // Create a new item
     public function createItem()
     {
         $this->validate();
 
-        // Create the item first
         $item = Item::create([
             'name' => $this->name,
             'description' => $this->description,
@@ -43,13 +41,11 @@ class ItemCrud extends Component
             'stock' => $this->stock,
         ]);
 
-        // Handle image upload if provided
         if ($this->image) {
             $imagePath = $this->handleImageUpload($item);
             $item->update(['image_path' => $imagePath]);
         }
 
-        // Reset the form
         $this->resetForm();
         $this->dispatch('swal:toast', [
             'background' => 'success',
@@ -58,7 +54,6 @@ class ItemCrud extends Component
         $this->dispatch('item-added');
     }
 
-    // Edit an existing item
     public function editItem(Item $item)
     {
         $this->isEditing = true;
@@ -71,7 +66,6 @@ class ItemCrud extends Component
         $this->currentImagePath = $item->image_path;
     }
 
-    // Update an existing item
     public function updateItem()
     {
         $this->validate();
@@ -86,19 +80,15 @@ class ItemCrud extends Component
             'stock' => $this->stock,
         ]);
 
-        // Handle new image upload
         if ($this->image) {
-            // Delete old image if exists
             if ($item->image_path) {
                 $this->deleteImage($item->image_path);
             }
 
-            // Upload new image
             $imagePath = $this->handleImageUpload($item);
             $item->update(['image_path' => $imagePath]);
         }
 
-        // Reset the form
         $this->resetForm();
         $this->dispatch('swal:toast', [
             'background' => 'success',
@@ -107,10 +97,8 @@ class ItemCrud extends Component
         $this->dispatch('item-updated');
     }
 
-    // Delete an item
     public function deleteItem(Item $item)
     {
-        // Delete associated image if exists
         if ($item->image_path) {
             $this->deleteImage($item->image_path);
         }
@@ -122,7 +110,6 @@ class ItemCrud extends Component
         ]);
     }
 
-    // Remove current image
     public function removeCurrentImage()
     {
         if ($this->currentImagePath && $this->itemId) {
@@ -141,32 +128,24 @@ class ItemCrud extends Component
         }
     }
 
-    // Generate safe filename for item
     private function generateSafeFilename($item, $extension)
     {
-        // Create a safe filename using item ID and sanitized name
         $safeName = Str::slug($item->name, '-');
         $timestamp = now()->format('YmdHis');
 
         return "item-{$item->id}-{$safeName}-{$timestamp}.{$extension}";
     }
 
-    // Handle image upload
     private function handleImageUpload($item)
     {
         if ($this->image) {
-            // Ensure the storage/img directory exists
             if (!Storage::disk('public')->exists('img')) {
                 Storage::disk('public')->makeDirectory('img');
             }
 
-            // Get file extension
             $extension = $this->image->getClientOriginalExtension();
-
-            // Generate safe filename
             $filename = $this->generateSafeFilename($item, $extension);
 
-            // Store the image
             $path = $this->image->storeAs('img', $filename, 'public');
 
             return $path;
@@ -174,7 +153,6 @@ class ItemCrud extends Component
         return null;
     }
 
-    // Delete image
     private function deleteImage($imagePath)
     {
         if ($imagePath && Storage::disk('public')->exists($imagePath)) {
@@ -182,7 +160,6 @@ class ItemCrud extends Component
         }
     }
 
-    // Reset form fields
     public function resetForm()
     {
         $this->itemId = null;
@@ -197,7 +174,6 @@ class ItemCrud extends Component
         $this->resetValidation();
     }
 
-    // Get categories for dropdown
     public function getCategoriesProperty()
     {
         return collect(ProductCategory::cases())->mapWithKeys(function ($case) {

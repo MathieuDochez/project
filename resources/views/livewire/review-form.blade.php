@@ -102,7 +102,7 @@
         </div>
     </form>
 
-    <!-- Success Animation (you can add this later) -->
+    <!-- Success Animation -->
     <div x-show="false" x-transition class="text-center py-8">
         <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <x-heroicon-o-check class="w-8 h-8 text-green-600"/>

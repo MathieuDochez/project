@@ -15,17 +15,16 @@ class DogCrud extends Component
     use WithFileUploads, WithPagination;
 
     public $dogId, $name, $breed, $age, $weight, $color, $owner, $additional_info;
-    public $image; // For file upload
-    public $currentImagePath; // To display current image when editing
+    public $image;
+    public $currentImagePath;
     public $isEditing = false;
 
-    // Mount: Initialize the list of dogs
     public function mount()
     {
-        // No longer needed - we'll use the render method for data
+
     }
 
-    // Create a new dog
+
     public function createDog()
     {
         $this->validate([
@@ -39,7 +38,6 @@ class DogCrud extends Component
             'image' => 'nullable|image|max:5024', // Max 5MB
         ]);
 
-        // Create the dog first
         $dog = Dog::create([
             'name' => $this->name,
             'breed' => $this->breed,
@@ -50,25 +48,20 @@ class DogCrud extends Component
             'additional_info' => $this->additional_info,
         ]);
 
-        // Handle image upload if provided
         $imagePath = null;
         if ($this->image) {
             $imagePath = $this->handleImageUpload($dog);
-
-            // Update dog with image path
             $dog->update(['image_path' => $imagePath]);
         }
 
-        // Reset the form
         $this->resetForm();
         $this->dispatch('swal:toast', [
             'background' => 'success',
             'html' => 'Dog successfully added!',
         ]);
-        $this->dispatch('dog-added'); // Reset form and preview
+        $this->dispatch('dog-added');
     }
 
-    // Edit an existing dog
     public function editDog(Dog $dog)
     {
         $this->isEditing = true;
@@ -80,12 +73,9 @@ class DogCrud extends Component
         $this->color = $dog->color;
         $this->owner = $dog->owner;
         $this->additional_info = $dog->additional_info;
-
-        // Set current image path
         $this->currentImagePath = $dog->image_path;
     }
 
-    // Update an existing dog
     public function updateDog()
     {
         $this->validate([
@@ -111,31 +101,25 @@ class DogCrud extends Component
             'additional_info' => $this->additional_info,
         ]);
 
-        // Handle new image upload
         if ($this->image) {
-            // Delete old image if exists
             if ($dog->image_path) {
                 $this->deleteImage($dog->image_path);
             }
 
-            // Upload new image
             $imagePath = $this->handleImageUpload($dog);
             $dog->update(['image_path' => $imagePath]);
         }
 
-        // Reset the form
         $this->resetForm();
         $this->dispatch('swal:toast', [
             'background' => 'success',
             'html' => 'Dog successfully updated!',
         ]);
-        $this->dispatch('dog-updated'); // Reset form and preview
+        $this->dispatch('dog-updated');
     }
 
-    // Delete a dog
     public function deleteDog(Dog $dog)
     {
-        // Delete associated image if exists
         if ($dog->image_path) {
             $this->deleteImage($dog->image_path);
         }
@@ -147,7 +131,6 @@ class DogCrud extends Component
         ]);
     }
 
-    // Remove current image
     public function removeCurrentImage()
     {
         if ($this->currentImagePath && $this->dogId) {
@@ -166,7 +149,6 @@ class DogCrud extends Component
         }
     }
 
-    // Generate safe filename for dog
     private function generateSafeFilename($dog, $extension)
     {
         // Create a safe filename using dog ID and sanitized name
@@ -176,22 +158,16 @@ class DogCrud extends Component
         return "dog-{$dog->id}-{$safeName}-{$timestamp}.{$extension}";
     }
 
-    // Handle image upload
     private function handleImageUpload($dog)
     {
         if ($this->image) {
-            // Ensure the storage/img directory exists
             if (!Storage::disk('public')->exists('img')) {
                 Storage::disk('public')->makeDirectory('img');
             }
-
-            // Get file extension
             $extension = $this->image->getClientOriginalExtension();
 
-            // Generate safe filename
             $filename = $this->generateSafeFilename($dog, $extension);
 
-            // Store the image
             $path = $this->image->storeAs('img', $filename, 'public');
 
             return $path;
@@ -199,7 +175,6 @@ class DogCrud extends Component
         return null;
     }
 
-    // Delete image
     private function deleteImage($imagePath)
     {
         if ($imagePath && Storage::disk('public')->exists($imagePath)) {
@@ -207,7 +182,6 @@ class DogCrud extends Component
         }
     }
 
-    // Reset form fields
     public function resetForm()
     {
         $this->dogId = null;
@@ -228,7 +202,7 @@ class DogCrud extends Component
     public function render()
     {
         return view('livewire.crud.dog-crud', [
-            'dogs' => Dog::paginate(10) // Paginate with 10 dogs per page
+            'dogs' => Dog::paginate(10)
         ]);
     }
 }

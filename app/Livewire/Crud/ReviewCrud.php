@@ -77,10 +77,8 @@ class ReviewCrud extends Component
         $this->rating = '';
         $this->comment = '';
         $this->isEditing = false;
-        // $this->editingReviewId = null;
-        // $this->user_id = '';
 
-        $this->resetValidation(); // Clear validation errors
+        $this->resetValidation();
     }
 
     #[Layout('layouts.project', ['title' => '', 'description' => 'Dog kennel Item'])]

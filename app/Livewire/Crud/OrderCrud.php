@@ -14,17 +14,15 @@ class OrderCrud extends Component
     public $order_id, $user_id, $total_price;
     public $isEditing = false;
 
-    // Method to handle updating an existing order
     public function edit($id)
     {
         $this->isEditing = true;
         $order = Order::findOrFail($id);
         $this->order_id = $order->id;
         $this->user_id = $order->user_id;
-        $this->total_price = $order->total_price; // Use the actual total_price from database
+        $this->total_price = $order->total_price;
     }
 
-    // Method to handle saving updates
     public function update()
     {
         $this->validate([
@@ -34,7 +32,6 @@ class OrderCrud extends Component
 
         $order = Order::find($this->order_id);
 
-        // Update the order
         $order->update([
             'user_id' => $this->user_id,
             'total_price' => $this->total_price,
@@ -44,14 +41,12 @@ class OrderCrud extends Component
         $this->dispatch('swal:toast', ['background' => 'success', 'html' => 'Order updated successfully!']);
     }
 
-    // Method to handle deleting an order
     public function delete($id)
     {
         Order::findOrFail($id)->delete();
         $this->dispatch('swal:toast', ['background' => 'error', 'html' => 'Order deleted successfully!']);
     }
 
-    // Method to reset the form fields
     public function resetForm()
     {
         $this->order_id = null;
@@ -60,7 +55,6 @@ class OrderCrud extends Component
         $this->isEditing = false;
     }
 
-    // Render the view
     #[Layout('layouts.project', ['title' => '', 'description' => 'Dog kennel Item'])]
     public function render()
     {

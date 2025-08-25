@@ -28,7 +28,6 @@ class Orderline extends Model
         return $this->belongsTo(Item::class);
     }
 
-    // Accessors
     public function getTotalPriceAttribute()
     {
         return $this->quantity * $this->price;
